@@ -1,3 +1,5 @@
+import java.util.Arrays;
+
 public enum Enchantment {
 	AQUA_AFFINITY         (1, 2),
 	BANE_OF_ARTHROPODS    (5, 1),
@@ -40,7 +42,7 @@ public enum Enchantment {
 	private final int mMaximumLevel;
 	private final int mMultiplierFromBook;
 
-	private Enchantment(int maximumLevel, int multiplierFromBook) {
+	Enchantment(int maximumLevel, int multiplierFromBook) {
 		this.mMaximumLevel = maximumLevel;
 		this.mMultiplierFromBook = multiplierFromBook;
 	}
@@ -52,4 +54,10 @@ public enum Enchantment {
 	public int getMultiplierFromBook() {
 		return this.mMultiplierFromBook;
 	}
+
+
+	public static String toList() {
+		return Arrays.toString(Enchantment.values());
+	}
+
 }

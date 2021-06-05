@@ -1,36 +1,30 @@
-import java.awt.*;
-import java.io.Console;
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
 import java.util.*;
-import java.util.List;
 
 public class MCEnchant {
 
-	static List<Enchantment> minimumEnchantmentCostList = Collections.emptyList();
-	static List<Integer> minimumEnchantmentCostOrder = Collections.emptyList();
-	static List<Integer> minimumEnchantmentCostLevels = Collections.emptyList();
-	static int minimumEnchantmentCost = Integer.MAX_VALUE;
-	static int minimumEnchantmentCostExperienceCost = Integer.MAX_VALUE;
+	static List<Enchantment> minimumEnchantmentCostList;
+	static List<Integer> minimumEnchantmentCostOrder;
+	static List<Integer> minimumEnchantmentCostLevels;
+	static int minimumEnchantmentCost;
+	static int minimumEnchantmentCostExperienceCost;
 
-	static List<Enchantment> minimumExperienceCostList = Collections.emptyList();
-	static List<Integer> minimumExperienceCostOrder = Collections.emptyList();
-	static List<Integer> minimumExperienceCostLevels = Collections.emptyList();
-	static int minimumExperienceCost = Integer.MAX_VALUE;
-	static int minimumExperienceCostEnchantmentCost = Integer.MAX_VALUE;
+	static List<Enchantment> minimumExperienceCostList;
+	static List<Integer> minimumExperienceCostOrder;
+	static List<Integer> minimumExperienceCostLevels;
+	static int minimumExperienceCost;
+	static int minimumExperienceCostEnchantmentCost;
 
-	static List<Enchantment> maximumEnchantmentCostList = Collections.emptyList();
-	static List<Integer> maximumEnchantmentCostOrder = Collections.emptyList();
-	static List<Integer> maximumEnchantmentCostLevels = Collections.emptyList();
-	static int maximumEnchantmentCost = 0;
-	static int maximumEnchantmentCostExperienceCost = 0;
+	static List<Enchantment> maximumEnchantmentCostList;
+	static List<Integer> maximumEnchantmentCostOrder;
+	static List<Integer> maximumEnchantmentCostLevels;
+	static int maximumEnchantmentCost;
+	static int maximumEnchantmentCostExperienceCost;
 
-	static List<Enchantment> maximumExperienceCostList = Collections.emptyList();
-	static List<Integer> maximumExperienceCostOrder = Collections.emptyList();
-	static List<Integer> maximumExperienceCostLevels = Collections.emptyList();
-	static int maximumExperienceCost = 0;
-	static int maximumExperienceCostEnchantmentCost = 0;
+	static List<Enchantment> maximumExperienceCostList;
+	static List<Integer> maximumExperienceCostOrder;
+	static List<Integer> maximumExperienceCostLevels;
+	static int maximumExperienceCost;
+	static int maximumExperienceCostEnchantmentCost;
 
 	static int getExperienceCost(int enchantmentCost) {
 		if (enchantmentCost <= 16) {
@@ -148,6 +142,9 @@ public class MCEnchant {
 	}
 
 	public static void run(List<Enchantment> baseEnchantments, int count) {
+
+		initialize();
+
 		if (count == 1) {
 			int baseEnchantmentsCount = baseEnchantments.size();
 			List<List<Enchantment>> enchantmentsLists = new ArrayList<>(baseEnchantmentsCount + 1);
@@ -174,67 +171,29 @@ public class MCEnchant {
 		}
 	}
 
-	public static void main(String... args) {
-		List<Enchantment> baseEnchantments = new ArrayList<>();
+	public static void initialize() {
+		minimumEnchantmentCostList = Collections.emptyList();
+		minimumEnchantmentCostOrder = Collections.emptyList();
+		minimumEnchantmentCostLevels = Collections.emptyList();
+		minimumEnchantmentCost = Integer.MAX_VALUE;
+		minimumEnchantmentCostExperienceCost = Integer.MAX_VALUE;
 
-		/******* Start of Edits *******/
+		minimumExperienceCostList = Collections.emptyList();
+		minimumExperienceCostOrder = Collections.emptyList();
+		minimumExperienceCostLevels = Collections.emptyList();
+		minimumExperienceCost = Integer.MAX_VALUE;
+		minimumExperienceCostEnchantmentCost = Integer.MAX_VALUE;
 
-		/*
-		* The following code for opening JAR applications in console is
-		* taken from "Frezze98 bolalo" on StackOverflow at the following link:
-		* https://stackoverflow.com/questions/7704405/how-do-i-make-my-java-application-open-a-console-terminal-window
-		 */
-		Console console = System.console();
-		if(console == null && !GraphicsEnvironment.isHeadless()) {
-			String filename = MCEnchant.class.getProtectionDomain().getCodeSource().getLocation().toString().substring(6);
-			try {
-				File batch = new File("Launcher.bat");
-				if(!batch.exists()){
-					batch.createNewFile();
-					PrintWriter writer = new PrintWriter(batch);
-					writer.println("@echo off");
-					writer.println("java -jar " + filename);
-					writer.println("exit");
-					writer.flush();
-				}
-				Runtime.getRuntime().exec("cmd /c start \"\" "+batch.getPath());
-			} catch(IOException e) {
-				e.printStackTrace();
-			}
-		}
+		maximumEnchantmentCostList = Collections.emptyList();
+		maximumEnchantmentCostOrder = Collections.emptyList();
+		maximumEnchantmentCostLevels = Collections.emptyList();
+		maximumEnchantmentCost = 0;
+		maximumEnchantmentCostExperienceCost = 0;
 
-		if (args.length == 0) {
-			System.out.println ("Welcome!");
-			System.out.println("\n---- Here are the enchantments you can use with this tool: ----");
-
-			StringBuilder strB = new StringBuilder();
-			for (Enchantment enchant : Enchantment.values()) {
-				strB.append(enchant).append("\n");
-
-			}
-
-			System.out.println(strB.toString().trim());
-
-			System.out.println("\nEnter the enchantments to find the optimal order (separate with SPACE): ");
-
-			Scanner sc = new Scanner(System.in);
-			args = sc.nextLine().trim().toUpperCase().split(" ");
-
-		}
-
-		/******* End of Edits *******/
-
-		for (String arg : args) {
-			baseEnchantments.add(Enchantment.valueOf(arg));
-		}
-
-//		The order of enchantments is unimportant.
-//		run(baseEnchantments, baseEnchantments.size());
-//		The order of enchantments is important.
-		run(baseEnchantments, 1);
-		System.out.println("least expensive by level (" + minimumEnchantmentCost + ", " + minimumEnchantmentCostExperienceCost + " xp): " + minimumEnchantmentCostList + " " + minimumEnchantmentCostOrder + " " + minimumEnchantmentCostLevels);
-		System.out.println("least expensive by xp (" + minimumExperienceCost + ", " + minimumExperienceCostEnchantmentCost + " levels): " + minimumExperienceCostList + " " + minimumExperienceCostOrder + " " + minimumExperienceCostLevels);
-		System.out.println("most expensive by level (" + maximumEnchantmentCost + ", " + maximumEnchantmentCostExperienceCost + " xp): " + maximumEnchantmentCostList + " " + maximumEnchantmentCostOrder + " " + maximumEnchantmentCostLevels);
-		System.out.println("most expensive by xp (" + maximumExperienceCost + ", " + maximumExperienceCostEnchantmentCost + " levels): " + maximumExperienceCostList + " " + maximumExperienceCostOrder + " " + maximumEnchantmentCostLevels);
+		maximumExperienceCostList = Collections.emptyList();
+		maximumExperienceCostOrder = Collections.emptyList();
+		maximumExperienceCostLevels = Collections.emptyList();
+		maximumExperienceCost = 0;
+		maximumExperienceCostEnchantmentCost = 0;
 	}
 }

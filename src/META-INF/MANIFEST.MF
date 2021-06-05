@@ -1,4 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: MCEnchant
-Class-Path: OET-1.0.0.jar
-
