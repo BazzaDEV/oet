@@ -1,6 +1,6 @@
 public enum Argument {
 
-    SKIP_LAUNCHER ("--skipLauncher");
+    NO_GUI("--nogui");
 
     private final String arg;
     Argument(String arg) {

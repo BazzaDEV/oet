@@ -31,38 +31,12 @@ public class EnchantCLI {
             }
         }
 
-        if (!cmdArgs.contains(Argument.SKIP_LAUNCHER))
-            launchConsole();
+        if (!cmdArgs.contains(Argument.NO_GUI))
+            startMainMenu();
 
-        if (enchantArgs.isEmpty()) { // No enchant args, send to CLI menu
-            Menu menu = Menu.create()
-                    .setTitle("Optimal Enchant Tool")
-                    .setText(
-                            MenuText.create()
-                                    .newLine("Welcome!")
-                                    .build())
-                    .addOption(
-                            MenuOption.create()
-                                    .setKey('V').setText("View Enchantments")
-                                    .setAction(this::printEnchantments)
-                                    .build())
-                    .addOption(
-                            MenuOption.create()
-                                    .setKey('C').setText("Calculate")
-                                    .setAction(() -> {
-                                        List<Enchantment> enchantments = getEnchantmentsFromUser();
-                                        runCalculation(enchantments);
-            })
-                                    .build())
-                    .addOption(
-                            MenuOption.create()
-                                    .setKey('Q').setText("Quit")
-                                    .setAction(this::exit)
-                                    .build())
-                    .build();
+        if (enchantArgs.isEmpty()) // No enchant args, send to CLI menu
+            startGUI();
 
-            menu.runMenu();
-        }
 
 
 
@@ -72,6 +46,41 @@ public class EnchantCLI {
 
     }
 
+    private void startMainMenu() {
+        Menu menu = Menu.create()
+                .setTitle("Optimal Enchant Tool")
+                .setText(
+                        MenuText.create()
+                                .newLine("Welcome!")
+                                .build())
+                .addOption(
+                        MenuOption.create()
+                                .setKey('V').setText("View Enchantments")
+                                .setAction(this::printEnchantments)
+                                .build())
+                .addOption(
+                        MenuOption.create()
+                                .setKey('C').setText("Calculate")
+                                .setAction(() -> {
+                                    List<Enchantment> enchantments = getEnchantmentsFromUser();
+                                    runCalculation(enchantments);
+                                })
+                                .build())
+                .addOption(
+                        MenuOption.create()
+                                .setKey('Q').setText("Quit")
+                                .setAction(this::exit)
+                                .build())
+                .build();
+
+        menu.runMenu();
+    }
+
+    private void startGUI() {
+
+    }
+
+    @Deprecated
     private void launchConsole() {
         /*
          * The following code for opening JAR applications in console is
