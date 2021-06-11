@@ -12,41 +12,15 @@ import java.util.Scanner;
 
 public class EnchantCLI {
 
-    HashSet<Argument> cmdArgs;
-    HashSet<Enchantment> enchantArgs;
+    private HashSet<Argument> cmdArgs;
+    private HashSet<Enchantment> enchantArgs;
 
-    public static void main(String[] args) {
-        new EnchantCLI().run(args);
+    public EnchantCLI(HashSet<Argument> cmdArgs, HashSet<Enchantment> enchantArgs) {
+        this.cmdArgs = cmdArgs;
+        this.enchantArgs = enchantArgs;
     }
 
-    private void run(String[] args) { {
-        cmdArgs = new HashSet<>();
-        enchantArgs = new HashSet<>();
-
-        for (String arg : args) {
-            if (arg.startsWith("--")) { // this is a program argument
-                cmdArgs.add(Argument.fromArgument(arg));
-            } else { // this is an enchantment
-                enchantArgs.add(Enchantment.valueOf(arg));
-            }
-        }
-
-        if (!cmdArgs.contains(Argument.NO_GUI))
-            startMainMenu();
-
-        if (enchantArgs.isEmpty()) // No enchant args, send to CLI menu
-            startGUI();
-
-
-
-
-    }
-
-
-
-    }
-
-    private void startMainMenu() {
+    public void start() {
         Menu menu = Menu.create()
                 .setTitle("Optimal Enchant Tool")
                 .setText(
@@ -74,10 +48,6 @@ public class EnchantCLI {
                 .build();
 
         menu.runMenu();
-    }
-
-    private void startGUI() {
-
     }
 
     @Deprecated

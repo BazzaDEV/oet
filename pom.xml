@@ -20,6 +20,12 @@
             <artifactId>SimpleMenus</artifactId>
             <version>1.2.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>1.2</version>
+        </dependency>
     </dependencies>
 
     <build>
