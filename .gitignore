@@ -4,3 +4,4 @@
 /target/
 *.bat
 *.jar
+*.iml
