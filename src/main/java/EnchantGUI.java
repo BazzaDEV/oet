@@ -19,7 +19,10 @@ public class EnchantGUI extends JFrame implements ItemListener {
 
     private JPanel contentPane;
     private JButton calculateButton;
+
+    private JTabbedPane tabbedPane1;
     private JPanel selectEnchantPanel;
+
 
     public EnchantGUI(String title, HashSet<Argument> cmdArgs) {
         super(title);
@@ -39,8 +42,8 @@ public class EnchantGUI extends JFrame implements ItemListener {
         FlatLightLaf.setup();
 
         // Rest of UI goes here
-        this.setMinimumSize(new Dimension(600, 500));
-        this.setMaximumSize(new Dimension(600, 500));
+        this.setMinimumSize(new Dimension(500, 550));
+        this.setMaximumSize(new Dimension(500, 550));
 
         selectEnchantPanel.setLayout(new WrapLayout());
 
@@ -81,7 +84,8 @@ public class EnchantGUI extends JFrame implements ItemListener {
 
         MCEnchant.run(enchantments, enchantArgs.size());
 
-        System.out.println("least expensive by level (" + MCEnchant.minimumEnchantmentCost + " levels): " + MCEnchant.minimumEnchantmentCostOrder + " " + MCEnchant.minimumEnchantmentCostLevels);
+        System.out.println("least expensive by level (" + MCEnchant.minimumEnchantmentCost + " levels): " + MCEnchant.minimumEnchantmentCostList + " " + MCEnchant.minimumEnchantmentCostOrder + " " + MCEnchant.minimumEnchantmentCostLevels);
+        System.out.println(MCEnchant.instructions());
     }
 
     public static void main(String[] args) {
