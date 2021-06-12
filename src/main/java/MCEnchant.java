@@ -171,6 +171,39 @@ public class MCEnchant {
 		}
 	}
 
+	public static String instructions() {
+		StringBuilder stringBuilder = new StringBuilder();
+
+//		List<Integer> enchantOrder = MCEnchant.minimumEnchantmentCostOrder;
+//		List<Enchantment> enchantments = MCEnchant.minimumEnchantmentCostList;
+
+		List<Integer> enchantOrder = Arrays.asList(0, 1, 0, 1, 0, 1, 0);
+		List<Enchantment> enchantments = Arrays.asList(Enchantment.SHARPNESS, Enchantment.LOOTING, Enchantment.KNOCKBACK, Enchantment.MENDING, Enchantment.UNBREAKING, Enchantment.SWEEPING_EDGE, Enchantment.FIRE_ASPECT);
+		List<String> current = new ArrayList<>();
+
+		current.add(EnchantableItem.SWORD.name());
+
+		for (Enchantment enchantment : enchantments) {
+			current.add(enchantment.name());
+		}
+
+		stringBuilder.append(current).append("\n");
+
+		int index = 0;
+		for (int i : enchantOrder) {
+			if (i == 0) {
+				// Combine item with next enchantment
+				current.set(index+1, current.get(index) + "+" + current.get(index+1));
+				current.remove(index);
+
+				stringBuilder.append(current);
+				stringBuilder.append("\n");
+			}
+		}
+
+		return stringBuilder.toString().trim();
+	}
+
 	public static void initialize() {
 		minimumEnchantmentCostList = Collections.emptyList();
 		minimumEnchantmentCostOrder = Collections.emptyList();
