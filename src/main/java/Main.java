@@ -18,7 +18,7 @@ public class Main {
         }
 
         if (cmdArgs.isEmpty() && enchantArgs.isEmpty())
-            new EnchantGUI(cmdArgs).start();
+            new EnchantGUI("Optimal Enchant Tool", cmdArgs).start();
 
         else if (cmdArgs.contains(Argument.NO_GUI))
             new EnchantCLI(cmdArgs, enchantArgs).start();

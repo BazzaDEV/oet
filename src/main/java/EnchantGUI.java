@@ -2,21 +2,36 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 
-public class EnchantGUI implements ItemListener {
+public class EnchantGUI extends JFrame implements ItemListener {
 
+    // cmdArgs has no use yet for GUI, but here for future purposes
     private final HashSet<Argument> cmdArgs;
     private final HashSet<Enchantment> enchantArgs;
 
-    public EnchantGUI(HashSet<Argument> cmdArgs) {
-        this.cmdArgs = cmdArgs;
+    private JPanel contentPane;
+    private JButton calculateButton;
+    private JPanel selectEnchantPanel;
 
+    public EnchantGUI(String title, HashSet<Argument> cmdArgs) {
+        super(title);
+
+        this.cmdArgs = cmdArgs;
         enchantArgs = new HashSet<>();
+
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.setContentPane(contentPane);
+        this.pack();
+
+        calculateButton.addActionListener(e -> calculate());
     }
 
     public void start() {
@@ -24,17 +39,10 @@ public class EnchantGUI implements ItemListener {
         FlatLightLaf.setup();
 
         // Rest of UI goes here
-        JFrame frame = new JFrame();
-        frame.setTitle("Optimal Enchant Tool");
-        frame.setLayout(new GridLayout(0, 1));
-        frame.setSize(600, 500);
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setMinimumSize(new Dimension(600, 500));
+        this.setMaximumSize(new Dimension(600, 500));
 
-        JLabel selectEnchantsLabel = new JLabel("Select enchantments from the list below:");
-        frame.add(selectEnchantsLabel);
-
-        JPanel enchantSelectPanel = new JPanel();
-        enchantSelectPanel.setLayout(new WrapLayout());
+        selectEnchantPanel.setLayout(new WrapLayout());
 
         List<JCheckBox> checkBoxes = new ArrayList<>();
 
@@ -45,17 +53,7 @@ public class EnchantGUI implements ItemListener {
             checkBoxes.add(checkBox);
         }
 
-        checkBoxes.forEach(enchantSelectPanel::add);
-
-        frame.add(enchantSelectPanel);
-
-        JButton button = new JButton("Calculate");
-        frame.add(button);
-
-        frame.setVisible(true);
-
-
-
+        checkBoxes.forEach(selectEnchantPanel::add);
     }
 
     @Override
@@ -75,5 +73,20 @@ public class EnchantGUI implements ItemListener {
         // Print enchantArgs contents to console to check if this worked
         // enchantArgs.forEach((enchant -> System.out.println(enchant.getPrettyName())));
         // System.out.println();
+    }
+
+    public void calculate() {
+        Enchantment[] enchantsArr = enchantArgs.toArray(new Enchantment[0]);
+        List<Enchantment> enchantments = new ArrayList<>(Arrays.asList(enchantsArr));
+
+        MCEnchant.run(enchantments, enchantArgs.size());
+
+        System.out.println("least expensive by level (" + MCEnchant.minimumEnchantmentCost + " levels): " + MCEnchant.minimumEnchantmentCostOrder + " " + MCEnchant.minimumEnchantmentCostLevels);
+    }
+
+    public static void main(String[] args) {
+        EnchantGUI frame = new EnchantGUI("Optimal Enchant Tool", new HashSet<>());
+        frame.start();
+        frame.setVisible(true);
     }
 }
