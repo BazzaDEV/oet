@@ -10,8 +10,8 @@ import java.util.List;
 
 public class EnchantGUI implements ItemListener {
 
-    private HashSet<Argument> cmdArgs;
-    private HashSet<Enchantment> enchantArgs;
+    private final HashSet<Argument> cmdArgs;
+    private final HashSet<Enchantment> enchantArgs;
 
     public EnchantGUI(HashSet<Argument> cmdArgs) {
         this.cmdArgs = cmdArgs;
@@ -68,6 +68,7 @@ public class EnchantGUI implements ItemListener {
         // (add if selected, remove if deselected)
         if (e.getStateChange()==ItemEvent.SELECTED)
             enchantArgs.add(enchantment);
+
         else if (e.getStateChange()==ItemEvent.DESELECTED)
             enchantArgs.remove(enchantment);
 
