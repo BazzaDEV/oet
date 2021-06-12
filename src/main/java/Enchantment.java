@@ -49,6 +49,10 @@ public enum Enchantment {
 		this.mMultiplierFromBook = multiplierFromBook;
 	}
 
+	public static Enchantment fromPrettyName(String prettyName) {
+		return Enchantment.valueOf(prettyName.replaceAll(" ", "_").toUpperCase());
+	}
+
 	public String getPrettyName() {
 		return prettyName;
 	}
