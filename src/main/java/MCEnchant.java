@@ -171,37 +171,60 @@ public class MCEnchant {
 		}
 	}
 
-	public static String instructions() {
-		StringBuilder stringBuilder = new StringBuilder();
+	public static String[] instructions() {
+		List<String> instructs = new ArrayList<>();
 
-//		List<Integer> enchantOrder = MCEnchant.minimumEnchantmentCostOrder;
-//		List<Enchantment> enchantments = MCEnchant.minimumEnchantmentCostList;
+		List<Integer> enchantOrder = MCEnchant.minimumEnchantmentCostOrder;
+		List<Integer> enchantCost = MCEnchant.minimumEnchantmentCostLevels;
+		List<Enchantment> enchantments = MCEnchant.minimumEnchantmentCostList;
+//		List<Integer> enchantOrder = Arrays.asList(0, 1, 0, 1, 0, 1, 0);
+//		List<Enchantment> enchantments = Arrays.asList(Enchantment.SHARPNESS, Enchantment.LOOTING, Enchantment.KNOCKBACK, Enchantment.MENDING, Enchantment.UNBREAKING, Enchantment.SWEEPING_EDGE, Enchantment.FIRE_ASPECT);
 
-		List<Integer> enchantOrder = Arrays.asList(0, 1, 0, 1, 0, 1, 0);
-		List<Enchantment> enchantments = Arrays.asList(Enchantment.SHARPNESS, Enchantment.LOOTING, Enchantment.KNOCKBACK, Enchantment.MENDING, Enchantment.UNBREAKING, Enchantment.SWEEPING_EDGE, Enchantment.FIRE_ASPECT);
 		List<String> current = new ArrayList<>();
 
-		current.add(EnchantableItem.SWORD.name());
+		current.add(EnchantableItem.SWORD.getItemName());
 
 		for (Enchantment enchantment : enchantments) {
-			current.add(enchantment.name());
+			current.add(enchantment.getPrettyName());
 		}
 
-		stringBuilder.append(current).append("\n");
+		instructs.add("Gather the required books and tool/weapon/armor to enchant: ");
+		instructs.add(String.valueOf(current));
+		instructs.add(" ");
+		// instructs.add(String.valueOf(enchantOrder));
 
-		int index = 0;
+		// stringBuilder.append(current).append("\n");
+		// stringBuilder.append(enchantOrder).append("\n\n");
+
+		int stepNumber = 1;
 		for (int i : enchantOrder) {
-			if (i == 0) {
-				// Combine item with next enchantment
-				current.set(index+1, current.get(index) + "+" + current.get(index+1));
-				current.remove(index);
+			instructs.add("Step " + stepNumber + ": ");
+			instructs.add("Combine '" + current.get(i) + "' with '" + current.get(i + 1) + "'");
+			instructs.add("Cost -> " + enchantCost.get(stepNumber-1) + " levels");
+			// stringBuilder.append("Combine ").append(current.get(i)).append(" with ").append(current.get(i + 1)).append("\n");
 
-				stringBuilder.append(current);
-				stringBuilder.append("\n");
-			}
+			current.set(i+1, current.get(i) + " + " + current.get(i+1));
+			current.remove(i);
+
+			instructs.add(String.valueOf(current));
+			instructs.add(" ");
+
+			stepNumber++;
+			// stringBuilder.append(current);
+			// stringBuilder.append("\n\n");
 		}
 
-		return stringBuilder.toString().trim();
+		instructs.add("Total Cost: " + enchantCost.stream().reduce(0, Integer::sum) + " levels");
+
+		String[] res = new String[instructs.size()];
+
+		int i = 0;
+		for (String instruct : instructs) {
+			res[i++] = instruct;
+		}
+
+		return res;
+		// return stringBuilder.toString().trim();
 	}
 
 	public static void initialize() {

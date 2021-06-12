@@ -14,10 +14,10 @@ public class TestMain {
         List<Enchantment> enchantments = Arrays.asList(Enchantment.SHARPNESS, Enchantment.LOOTING, Enchantment.KNOCKBACK, Enchantment.MENDING, Enchantment.UNBREAKING, Enchantment.SWEEPING_EDGE, Enchantment.FIRE_ASPECT);
         List<String> current = new ArrayList<>();
 
-        current.add(EnchantableItem.SWORD.name());
+        current.add(EnchantableItem.SWORD.getItemName());
 
         for (Enchantment enchantment : enchantments) {
-            current.add(enchantment.name());
+            current.add(enchantment.getPrettyName());
         }
 
         stringBuilder.append(current).append("\n");
@@ -25,7 +25,8 @@ public class TestMain {
 
         for (int i : enchantOrder) {
             stringBuilder.append("Combine ").append(current.get(i)).append(" with ").append(current.get(i + 1)).append("\n");
-            current.set(i+1, current.get(i) + "+" + current.get(i+1));
+            if (i == 0)
+                current.set(i+1, current.get(i) + " + " + current.get(i+1));
             current.remove(i);
 
             stringBuilder.append(current);

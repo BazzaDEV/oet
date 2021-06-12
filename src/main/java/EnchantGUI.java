@@ -2,8 +2,6 @@ import com.formdev.flatlaf.FlatLightLaf;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
 import java.awt.event.ItemListener;
 import java.util.ArrayList;
@@ -34,7 +32,14 @@ public class EnchantGUI extends JFrame implements ItemListener {
         this.setContentPane(contentPane);
         this.pack();
 
-        calculateButton.addActionListener(e -> calculate());
+        calculateButton.addActionListener(e -> {
+            if (enchantArgs.size() > 6) {
+                showConfirmCalculateDialog();
+            } else {
+                calculate();
+                showEnchantInstructionsDialog();
+            }
+        });
     }
 
     public void start() {
@@ -42,8 +47,8 @@ public class EnchantGUI extends JFrame implements ItemListener {
         FlatLightLaf.setup();
 
         // Rest of UI goes here
-        this.setMinimumSize(new Dimension(500, 550));
-        this.setMaximumSize(new Dimension(500, 550));
+        this.setMinimumSize(new Dimension(350, 550));
+        this.setMaximumSize(new Dimension(350, 550));
 
         selectEnchantPanel.setLayout(new WrapLayout());
 
@@ -78,14 +83,22 @@ public class EnchantGUI extends JFrame implements ItemListener {
         // System.out.println();
     }
 
+    public void showConfirmCalculateDialog() {
+        new ConfirmCalculateDialog(this).showDialog();
+    }
+
+    public void showEnchantInstructionsDialog() {
+        new EnchantInstructionsDialog(MCEnchant.instructions()).showDialog();
+    }
+
     public void calculate() {
         Enchantment[] enchantsArr = enchantArgs.toArray(new Enchantment[0]);
         List<Enchantment> enchantments = new ArrayList<>(Arrays.asList(enchantsArr));
 
         MCEnchant.run(enchantments, enchantArgs.size());
 
-        System.out.println("least expensive by level (" + MCEnchant.minimumEnchantmentCost + " levels): " + MCEnchant.minimumEnchantmentCostList + " " + MCEnchant.minimumEnchantmentCostOrder + " " + MCEnchant.minimumEnchantmentCostLevels);
-        System.out.println(MCEnchant.instructions());
+//        System.out.println("least expensive by level (" + MCEnchant.minimumEnchantmentCost + " levels): " + MCEnchant.minimumEnchantmentCostList + " " + MCEnchant.minimumEnchantmentCostOrder + " " + MCEnchant.minimumEnchantmentCostLevels);
+//        System.out.println(Arrays.toString(MCEnchant.instructions()));
     }
 
     public static void main(String[] args) {
@@ -93,4 +106,6 @@ public class EnchantGUI extends JFrame implements ItemListener {
         frame.start();
         frame.setVisible(true);
     }
+
+
 }
