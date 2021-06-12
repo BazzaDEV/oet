@@ -45,7 +45,7 @@
                             <archive>
                                 <manifest>
                                     <mainClass>
-                                        EnchantCLI
+                                        Main
                                     </mainClass>
                                 </manifest>
                             </archive>
