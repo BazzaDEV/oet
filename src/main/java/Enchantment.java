@@ -1,4 +1,12 @@
-import java.util.Arrays;
+/*************************************************************************************
+ *
+ * All credit for the majority of this class goes to scudobuio on Reddit:
+ * https://www.reddit.com/user/scudobuio
+ *
+ * It was released publicly on a Pastebin at the following link:
+ * https://pastebin.com/av1DwWTr
+ *
+ *************************************************************************************/
 
 public enum Enchantment {
 	AQUA_AFFINITY         ("Aqua Affinity", 1, 2),
