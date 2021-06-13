@@ -16,6 +16,11 @@
 
     <repositories>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+
+        <repository>
             <id>bintray-jetbrains-intellij-third-party-dependencies</id>
             <name>bintray</name>
             <url>https://jetbrains.bintray.com/intellij-third-party-dependencies</url>
@@ -24,7 +29,7 @@
 
     <dependencies>
         <dependency>
-            <groupId>dev.bazza</groupId>
+            <groupId>com.github.BazzaDEV</groupId>
             <artifactId>SimpleMenus</artifactId>
             <version>1.2.1</version>
         </dependency>
