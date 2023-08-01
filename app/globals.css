@@ -4,6 +4,11 @@
 
 @layer base {
   h1 {
-    @apply text-4xl;
+    @apply text-6xl sm:text-5xl;
+  }
+
+  .icon {
+    width: 1.75rem;
+    height: 1.75rem;
   }
 }
