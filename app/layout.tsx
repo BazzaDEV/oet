@@ -1,18 +1,43 @@
+import { Toaster } from "components/ui/toaster";
 import "./globals.css";
 import type { Metadata } from "next";
-
-import { Inter } from "next/font/google";
-
-// If loading a variable font, you don't need to specify the font weight
-const inter = Inter({
-  subsets: ["latin"],
-  display: "swap",
-});
 
 import localFont from "next/font/local";
 
 const faithful = localFont({
-  src: "../public/fonts/Faithful.ttf",
+  src: [
+    {
+      path: "../public/fonts/Faithful/Faithful32xRegular.woff",
+      weight: "normal",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Faithful/Faithful32xOblique.woff",
+      weight: "normal",
+      style: "oblique",
+    },
+    {
+      path: "../public/fonts/Faithful/Faithful32xSemibold.woff",
+      weight: "600",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Faithful/Faithful32xSemiboldOblique.woff",
+      weight: "600",
+      style: "oblique",
+    },
+    {
+      path: "../public/fonts/Faithful/Faithful32xBold.woff",
+      weight: "bold",
+      style: "normal",
+    },
+    {
+      path: "../public/fonts/Faithful/Faithful32xBoldOblique.woff",
+      weight: "bold",
+      style: "oblique",
+    },
+  ],
+  display: "swap",
 });
 
 export const metadata: Metadata = {
@@ -26,8 +51,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en" className={`${faithful.className} flex flex-col p-2`}>
-      <body>{children}</body>
+    <html
+      lang="en"
+      className={`${faithful.className} flex flex-col p-4 max-w-5xl m-auto bg-`}
+    >
+      <body>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

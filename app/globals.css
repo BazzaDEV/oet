@@ -3,12 +3,7 @@
 @tailwind utilities;
 
 @layer base {
-  h1 {
-    @apply text-6xl sm:text-5xl;
-  }
-
-  .icon {
-    width: 1.75rem;
-    height: 1.75rem;
+  .card {
+    @apply rounded-lg border border-slate-200 bg-white text-slate-950 shadow-sm dark:border-slate-800 dark:bg-slate-950 dark:text-slate-50;
   }
 }

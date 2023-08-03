@@ -28,7 +28,7 @@ enchantments.set(MinecraftEnchantment.Protection, {
 });
 
 enchantments.set(MinecraftEnchantment.FireProtection, {
-  name: MinecraftEnchantment.Protection,
+  name: MinecraftEnchantment.FireProtection,
   maxLevel: 4,
   editions: new Set([MinecraftEdition.Java, MinecraftEdition.Bedrock]),
   itemMultiplier: 2,
@@ -521,4 +521,81 @@ enchantments.set(MinecraftEnchantment.SweepingEdge, {
   itemMultiplier: 4,
   bookMultiplier: 2,
   appliesTo: [MinecraftItem.Book, MinecraftItem.Sword],
+});
+
+export const itemIcons = new Map<
+  MinecraftItem,
+  {
+    name: string;
+    gif?: boolean;
+  }
+>();
+
+itemIcons.set(MinecraftItem.Axe, {
+  name: "axe",
+});
+
+itemIcons.set(MinecraftItem.Book, {
+  name: "enchanted_book",
+  gif: true,
+});
+
+itemIcons.set(MinecraftItem.Boots, {
+  name: "boots",
+});
+
+itemIcons.set(MinecraftItem.Bow, {
+  name: "bow",
+});
+
+itemIcons.set(MinecraftItem.Chestplate, {
+  name: "chestplate",
+});
+
+itemIcons.set(MinecraftItem.Crossbow, {
+  name: "crossbow",
+});
+
+itemIcons.set(MinecraftItem.Elytra, {
+  name: "elytra",
+});
+
+itemIcons.set(MinecraftItem.FishingRod, {
+  name: "fishing_rod",
+});
+
+itemIcons.set(MinecraftItem.FlintAndSteel, {
+  name: "flint_and_steel",
+});
+
+itemIcons.set(MinecraftItem.Helmet, {
+  name: "helmet",
+});
+
+itemIcons.set(MinecraftItem.Hoe, {
+  name: "hoe",
+});
+
+itemIcons.set(MinecraftItem.Leggings, {
+  name: "leggings",
+});
+
+itemIcons.set(MinecraftItem.Pickaxe, {
+  name: "pickaxe",
+});
+
+itemIcons.set(MinecraftItem.Shears, {
+  name: "shears",
+});
+
+itemIcons.set(MinecraftItem.Shield, {
+  name: "shield",
+});
+
+itemIcons.set(MinecraftItem.Shovel, {
+  name: "shovel",
+});
+
+itemIcons.set(MinecraftItem.Sword, {
+  name: "sword",
 });

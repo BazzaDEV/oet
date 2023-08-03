@@ -80,14 +80,25 @@ export type Item = {
   name: MinecraftItem;
 };
 
-export type ActiveItem = Omit<Item, "legalEnchantments"> & {
+export type ActiveItem = Item & {
+  id: string;
   enchantments: ActiveEnchantment[];
   anvilUses: number;
 };
 
-export type ActiveEnchantment = Omit<
-  Enchantment,
-  "maxLevel" & "itemMultiplier" & "bookMultiplier" & "incompatibleEnchantments"
-> & {
+export type ActiveEnchantment = Enchantment & {
   level: number;
+};
+
+export type AnvilStep = {
+  targetItem: ActiveItem;
+  sacrificeItem: ActiveItem;
+  resultingItem: ActiveItem;
+  cost: number;
+};
+
+export type AnvilCombination = {
+  finalItem: ActiveItem;
+  finalCost: number;
+  steps: AnvilStep[];
 };
