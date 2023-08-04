@@ -33,6 +33,7 @@ function getAllPermutations(items: ActiveItem[]) {
 
 export function getAllCombinations(items: ActiveItem[]) {
   const permutations = getAllPermutations(items);
+  const itemPermutations = permutations.map((p) => p.map((i) => i.name));
 
   const combinations: AnvilCombination[] = [];
 

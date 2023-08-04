@@ -73,7 +73,7 @@ export default function OET() {
         <h2 className="text-center text-2xl">
           <span className="font-semibold">(2)</span> Add Enchantments
         </h2>
-        <Alert className="max-w-[700px] mx-auto">
+        {/* <Alert className="max-w-[700px] mx-auto">
           <Terminal className="h-4 w-4" />
           <AlertTitle className="font-semibold tracking-tighter">
             Warnings!
@@ -82,7 +82,7 @@ export default function OET() {
             This is a safe space to outline some warnings regarding the chosen
             items and/or enchantments.
           </AlertDescription>
-        </Alert>
+        </Alert> */}
         <ActiveItemsList
           items={items}
           updateItem={updateItem}
