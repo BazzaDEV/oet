@@ -1,47 +1,34 @@
-# Optimal Enchant Tool
-[![Build Status](https://travis-ci.com/BazzaDEV/OptimalEnchantTool.svg?branch=master)](https://travis-ci.com/BazzaDEV/OptimalEnchantTool)
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## TL;DR - How To Download
+## Getting Started
 
-Click [here](https://github.com/BazzaDEV/OptimalEnchantTool/releases/tag/2.0.0) to download the latest JAR.  
-Once download, double-click the JAR to run the tool. 
-Nice 'n easy.
+First, run the development server:
 
-## Who is it for?
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+```
 
-This tool is designed for Minecraft players who want to enchant their favourite gear, but they quickly realize...
-- Enchantments are becoming very expensive, or worst of all...
-- They add almost all their enchantments to make their god item, but they get this dreadful message:  
-![Anvil says enchant is too expensive, you jump off a bridge](docs/anvilTooExpensive.gif)
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-**That's where OET comes in.**
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-## What does it do?
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-Simply enter the enchantments you'd like to put on a given item, hit *Calculate*, and OET tells you everything:
-- In what order to put everything in the anvil in the cheapest way possible
-- How many levels everything will cost you, at each step and at the end
-- *(Coming Soon)* Which enchantments conflict with each other, so you know what you're getting into
+## Learn More
 
-## Okay, great - now how do I get it?
-Alright, fair enough.
+To learn more about Next.js, take a look at the following resources:
 
-### Download the JAR
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-1. Navigate to **Releases** in the right sidebar, click the latest release, look under **Assets** and download the latest JAR (usually named `OptimalEnchantTool-X.X.X.jar`)
-2. Find the JAR you just downloaded on your computer.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-### Run the Tool
+## Deploy on Vercel
 
-3. From here, you can run the tool in one of two ways...
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
-#### 1) Run the GUI *(most people should do this)*
-Simply double-click the JAR are you're golden!  
-*Obviously, I'm going to assume you have your JAVA_HOME path and the rest of those shenanigans in order.*
-
-#### 2) Run the tool from the terminal
-This has some advantages:
-- You can access **program arguments** to quickly calculate what you need without having to interact with the GUI.
-- If you prefer to run the **command line interface**, this is the way to go (*shameless plug alert* - the CLI was built using my very own [SimpleMenus API](https://go.bazza.dev/SimpleMenus) for Java). If this interests you, read the next section.
-
-## Running OET From a Terminal
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

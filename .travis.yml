@@ -1,9 +1,0 @@
-language: java
-deploy:
-  provider: releases
-  api_key: $GH_TOKEN
-  file_glob: true
-  file:
-    - "/home/travis/build/BazzaDEV/OptimalEnchantTool/target/OptimalEnchantTool-*.jar"
-  skip_cleanup: true
-  draft: true
