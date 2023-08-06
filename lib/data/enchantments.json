@@ -1,0 +1,940 @@
+{
+  "protection": {
+    "name": "protection",
+    "display_name": "Protection",
+    "max_level": 4,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor"
+    ],
+    "item_multiplier": 1,
+    "book_multiplier": 1,
+    "incompatible_with": [
+      "fire_protection",
+      "blast_protection",
+      "projectile_protection"
+    ],
+    "applies_to": [
+      "book",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ]
+  },
+  "fire_protection": {
+    "name": "fire_protection",
+    "display_name": "Fire Protection",
+    "max_level": 4,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor"
+    ],
+    "item_multiplier": 2,
+    "book_multiplier": 1,
+    "incompatible_with": [
+      "protection",
+      "blast_protection",
+      "projectile_protection"
+    ],
+    "applies_to": [
+      "book",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ]
+  },
+  "blast_protection": {
+    "name": "blast_protection",
+    "display_name": "Blast Protection",
+    "max_level": 4,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "incompatible_with": [
+      "protection",
+      "fire_protection",
+      "projectile_protection"
+    ],
+    "applies_to": [
+      "book",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ]
+  },
+  "projectile_protection": {
+    "name": "projectile_protection",
+    "display_name": "Projectile Protection",
+    "max_level": 4,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor"
+    ],
+    "item_multiplier": 2,
+    "book_multiplier": 1,
+    "incompatible_with": [
+      "protection",
+      "fire_protection",
+      "blast_protection"
+    ],
+    "applies_to": [
+      "book",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ]
+  },
+  "thorns": {
+    "name": "thorns",
+    "display_name": "Thorns",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor"
+    ],
+    "item_multiplier": 8,
+    "book_multiplier": 4,
+    "applies_to": [
+      "book",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots"
+    ]
+  },
+  "aqua_affinity": {
+    "name": "aqua_affinity",
+    "display_name": "Aqua Affinity",
+    "max_level": 1,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor",
+      "helmet"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "applies_to": [
+      "book",
+      "helmet"
+    ]
+  },
+  "respiration": {
+    "name": "respiration",
+    "display_name": "Respiration",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor",
+      "helmet"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "applies_to": [
+      "book",
+      "helmet"
+    ]
+  },
+  "feather_falling": {
+    "name": "feather_falling",
+    "display_name": "Feather Falling",
+    "max_level": 4,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor",
+      "boots"
+    ],
+    "item_multiplier": 2,
+    "book_multiplier": 1,
+    "applies_to": [
+      "book",
+      "boots"
+    ]
+  },
+  "depth_strider": {
+    "name": "depth_strider",
+    "display_name": "Depth Strider",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor",
+      "boots"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "incompatible_with": [
+      "frost_walker"
+    ],
+    "applies_to": [
+      "book",
+      "boots"
+    ]
+  },
+  "frost_walker": {
+    "name": "frost_walker",
+    "display_name": "Frost Walker",
+    "max_level": 2,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor",
+      "boots"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "incompatible_with": [
+      "depth_strider"
+    ],
+    "applies_to": [
+      "book",
+      "boots"
+    ]
+  },
+  "soul_speed": {
+    "name": "soul_speed",
+    "display_name": "Soul Speed",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor",
+      "boots"
+    ],
+    "item_multiplier": 8,
+    "book_multiplier": 4,
+    "applies_to": [
+      "book",
+      "boots"
+    ]
+  },
+  "swift_sneak": {
+    "name": "swift_sneak",
+    "display_name": "Swift Sneak",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "armor",
+      "leggings"
+    ],
+    "item_multiplier": 8,
+    "book_multiplier": 4,
+    "applies_to": [
+      "book",
+      "boots"
+    ]
+  },
+  "sharpness": {
+    "name": "sharpness",
+    "display_name": "Sharpness",
+    "max_level": 5,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons"
+    ],
+    "item_multiplier": 1,
+    "book_multiplier": 1,
+    "incompatible_with": [
+      "smite",
+      "bane_of_arthropods"
+    ],
+    "applies_to": [
+      "book",
+      "sword",
+      "axe"
+    ]
+  },
+  "smite": {
+    "name": "smite",
+    "display_name": "Smite",
+    "max_level": 5,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons"
+    ],
+    "item_multiplier": 2,
+    "book_multiplier": 1,
+    "incompatible_with": [
+      "sharpness",
+      "bane_of_arthropods"
+    ],
+    "applies_to": [
+      "book",
+      "sword",
+      "axe"
+    ]
+  },
+  "bane_of_arthropods": {
+    "name": "bane_of_arthropods",
+    "display_name": "Bane of Arthropods",
+    "max_level": 5,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons"
+    ],
+    "item_multiplier": 2,
+    "book_multiplier": 1,
+    "incompatible_with": [
+      "sharpness",
+      "smite"
+    ],
+    "applies_to": [
+      "book",
+      "sword",
+      "axe"
+    ]
+  },
+  "knockback": {
+    "name": "knockback",
+    "display_name": "Knockback",
+    "max_level": 2,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "sword"
+    ],
+    "item_multiplier": 2,
+    "book_multiplier": 1,
+    "applies_to": [
+      "book",
+      "sword"
+    ]
+  },
+  "fire_aspect": {
+    "name": "fire_aspect",
+    "display_name": "Fire Aspect",
+    "max_level": 2,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "sword"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "applies_to": [
+      "book",
+      "sword"
+    ]
+  },
+  "looting": {
+    "name": "looting",
+    "display_name": "Looting",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "sword"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "applies_to": [
+      "book",
+      "sword"
+    ]
+  },
+  "sweeping_edge": {
+    "name": "sweeping_edge",
+    "display_name": "Sweeping Edge",
+    "max_level": 3,
+    "editions": [
+      "java"
+    ],
+    "categories": [
+      "weapons",
+      "sword"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "applies_to": [
+      "book",
+      "sword"
+    ]
+  },
+  "efficiency": {
+    "name": "efficiency",
+    "display_name": "Efficiency",
+    "max_level": 5,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "tools"
+    ],
+    "item_multiplier": 1,
+    "book_multiplier": 1,
+    "applies_to": [
+      "book",
+      "pickaxe",
+      "shovel",
+      "axe",
+      "hoe",
+      "shears"
+    ]
+  },
+  "silk_touch": {
+    "name": "silk_touch",
+    "display_name": "Silk Touch",
+    "max_level": 1,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "tools"
+    ],
+    "item_multiplier": 8,
+    "book_multiplier": 4,
+    "incompatible_with": [
+      "fortune"
+    ],
+    "applies_to": [
+      "book",
+      "pickaxe",
+      "shovel",
+      "axe",
+      "hoe"
+    ],
+    "overrides": {
+      "bedrock": {
+        "applies_to": [
+          "book",
+          "pickaxe",
+          "shovel",
+          "axe",
+          "hoe",
+          "shears"
+        ]
+      }
+    }
+  },
+  "fortune": {
+    "name": "fortune",
+    "display_name": "Fortune",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "tools"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "incompatible_with": [
+      "silk_touch"
+    ],
+    "applies_to": [
+      "book",
+      "pickaxe",
+      "shovel",
+      "axe",
+      "hoe"
+    ]
+  },
+  "power": {
+    "name": "power",
+    "display_name": "Power",
+    "max_level": 5,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "bow"
+    ],
+    "item_multiplier": 1,
+    "book_multiplier": 1,
+    "applies_to": [
+      "book",
+      "bow"
+    ]
+  },
+  "punch": {
+    "name": "punch",
+    "display_name": "Punch",
+    "max_level": 2,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "bow"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "applies_to": [
+      "book",
+      "bow"
+    ]
+  },
+  "flame": {
+    "name": "flame",
+    "display_name": "Flame",
+    "max_level": 1,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "bow"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "applies_to": [
+      "book",
+      "bow"
+    ]
+  },
+  "infinity": {
+    "name": "infinity",
+    "display_name": "Infinity",
+    "max_level": 1,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "bow"
+    ],
+    "item_multiplier": 8,
+    "book_multiplier": 4,
+    "incompatible_with": [
+      "mending"
+    ],
+    "applies_to": [
+      "book",
+      "bow"
+    ]
+  },
+  "luck_of_the_sea": {
+    "name": "luck_of_the_sea",
+    "display_name": "Luck of the Sea",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "tools",
+      "fishing"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "applies_to": [
+      "book",
+      "fishing_rod"
+    ]
+  },
+  "lure": {
+    "name": "lure",
+    "display_name": "Lure",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "tools",
+      "fishing"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "applies_to": [
+      "book",
+      "fishing_rod"
+    ]
+  },
+  "curse_of_binding": {
+    "name": "curse_of_binding",
+    "display_name": "Curse of Binding",
+    "max_level": 1,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "curses"
+    ],
+    "item_multiplier": 8,
+    "book_multiplier": 4,
+    "applies_to": [
+      "book",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "elytra",
+      "carved_pumpkin",
+      "head",
+      "turtle_helmet"
+    ]
+  },
+  "curse_of_vanishing": {
+    "name": "curse_of_vanishing",
+    "display_name": "Curse of Vanishing",
+    "max_level": 1,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "curses"
+    ],
+    "item_multiplier": 8,
+    "book_multiplier": 4,
+    "applies_to": [
+      "book",
+      "pickaxe",
+      "shovel",
+      "axe",
+      "fishing_rod",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "sword",
+      "bow",
+      "hoe",
+      "shears",
+      "flint_and_steel",
+      "carrot_on_a_stick",
+      "warped_fungus_on_a_stick",
+      "shield",
+      "elytra",
+      "carved_pumpkin",
+      "head",
+      "turtle_helmet",
+      "trident",
+      "crossbow",
+      "compass"
+    ],
+    "overrides": {
+      "bedrock": {
+        "applies_to": [
+          "book",
+          "pickaxe",
+          "shovel",
+          "axe",
+          "fishing_rod",
+          "helmet",
+          "chestplate",
+          "leggings",
+          "boots",
+          "sword",
+          "bow",
+          "hoe",
+          "shears",
+          "flint_and_steel",
+          "carrot_on_a_stick",
+          "warped_fungus_on_a_stick",
+          "shield",
+          "elytra",
+          "carved_pumpkin",
+          "head",
+          "turtle_helmet",
+          "trident",
+          "crossbow",
+          "compass",
+          "recovery_compass"
+        ]
+      }
+    }
+  },
+  "impaling": {
+    "name": "impaling",
+    "display_name": "Impaling",
+    "max_level": 5,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "trident"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "applies_to": [
+      "book",
+      "trident"
+    ],
+    "overrides": {
+      "java": {
+        "item_multiplier": 4,
+        "book_multiplier": 2
+      },
+      "bedrock": {
+        "item_multiplier": 2,
+        "book_multiplier": 1
+      }
+    }
+  },
+  "riptide": {
+    "name": "riptide",
+    "display_name": "Riptide",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "trident"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "incompatible_with": [
+      "loyalty",
+      "channeling"
+    ],
+    "applies_to": [
+      "book",
+      "trident"
+    ]
+  },
+  "loyalty": {
+    "name": "loyalty",
+    "display_name": "Loyalty",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "trident"
+    ],
+    "item_multiplier": 1,
+    "book_multiplier": 1,
+    "incompatible_with": [
+      "riptide"
+    ],
+    "applies_to": [
+      "book",
+      "trident"
+    ]
+  },
+  "channeling": {
+    "name": "channeling",
+    "display_name": "Channeling",
+    "max_level": 1,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "trident"
+    ],
+    "item_multiplier": 8,
+    "book_multiplier": 4,
+    "incompatible_with": [
+      "riptide"
+    ],
+    "applies_to": [
+      "book",
+      "trident"
+    ]
+  },
+  "multishot": {
+    "name": "multishot",
+    "display_name": "Multishot",
+    "max_level": 1,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "crossbow"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "incompatible_with": [
+      "piercing"
+    ],
+    "applies_to": [
+      "book",
+      "crossbow"
+    ]
+  },
+  "piercing": {
+    "name": "piercing",
+    "display_name": "Piercing",
+    "max_level": 4,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "crossbow"
+    ],
+    "item_multiplier": 1,
+    "book_multiplier": 1,
+    "incompatible_with": [
+      "multishot"
+    ],
+    "applies_to": [
+      "book",
+      "crossbow"
+    ]
+  },
+  "quick_charge": {
+    "name": "quick_charge",
+    "display_name": "Quick Charge",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "weapons",
+      "crossbow"
+    ],
+    "item_multiplier": 2,
+    "book_multiplier": 1,
+    "applies_to": [
+      "book",
+      "crossbow"
+    ]
+  },
+  "unbreaking": {
+    "name": "unbreaking",
+    "display_name": "Unbreaking",
+    "max_level": 3,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "misc"
+    ],
+    "item_multiplier": 2,
+    "book_multiplier": 1,
+    "applies_to": [
+      "book",
+      "pickaxe",
+      "shovel",
+      "axe",
+      "fishing_rod",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "sword",
+      "bow",
+      "hoe",
+      "shears",
+      "flint_and_steel",
+      "carrot_on_a_stick",
+      "warped_fungus_on_a_stick",
+      "shield",
+      "elytra",
+      "turtle_helmet",
+      "trident",
+      "crossbow"
+    ]
+  },
+  "mending": {
+    "name": "mending",
+    "display_name": "Mending",
+    "max_level": 1,
+    "editions": [
+      "java",
+      "bedrock"
+    ],
+    "categories": [
+      "misc"
+    ],
+    "item_multiplier": 4,
+    "book_multiplier": 2,
+    "incompatible_with": [
+      "infinity"
+    ],
+    "applies_to": [
+      "book",
+      "pickaxe",
+      "shovel",
+      "axe",
+      "fishing_rod",
+      "helmet",
+      "chestplate",
+      "leggings",
+      "boots",
+      "sword",
+      "bow",
+      "hoe",
+      "shears",
+      "flint_and_steel",
+      "carrot_on_a_stick",
+      "warped_fungus_on_a_stick",
+      "shield",
+      "elytra",
+      "turtle_helmet",
+      "trident",
+      "crossbow"
+    ]
+  }
+}

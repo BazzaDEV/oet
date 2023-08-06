@@ -2,12 +2,7 @@ import Image from "next/image";
 import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
 import { Label } from "components/ui/label";
 import { Input } from "components/ui/input";
-import {
-  ActiveEnchantment,
-  ActiveItem,
-  Enchantment,
-  MinecraftEnchantment,
-} from "lib/types";
+import { ActiveEnchantment, ActiveItem, Enchantment } from "lib/types";
 import {
   Card,
   CardContent,
@@ -16,13 +11,7 @@ import {
   CardTitle,
 } from "components/ui/card";
 import { numberToRomanNumeral as toRoman } from "romanumber";
-import {
-  getApplicableEnchantments,
-  getItemImageUrl,
-  itemHasConflictingEnchant,
-  itemHasEnchant,
-} from "lib/utils";
-import { ChangeEvent, HTMLAttributes, forwardRef } from "react";
+import { ChangeEvent, HTMLAttributes, forwardRef, useState } from "react";
 import { Button } from "components/ui/button";
 import { AlertTriangle, Trash2 } from "lucide-react";
 import {
@@ -33,12 +22,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "components/ui/select";
-import { enchantments } from "lib/data";
+import {
+  getApplicableEnchantments,
+  getConflictingEnchantsforItem,
+  itemHasEnchant,
+} from "lib/enchantments";
+import { useAnvilContext } from "hooks/useAnvil";
+import { getIcon, getItemName } from "lib/items";
 
 interface EnchantmentInputProps {
   enchantment: ActiveEnchantment;
-  updateEnchantment: (enchantment: MinecraftEnchantment, level: number) => void;
-  deleteEnchantment: (enchantment: MinecraftEnchantment) => void;
+  updateEnchantment: (enchantment: Enchantment, level: number) => void;
+  deleteEnchantment: (enchantment: Enchantment) => void;
 }
 
 function EnchantmentInput({
@@ -46,29 +41,31 @@ function EnchantmentInput({
   updateEnchantment,
   deleteEnchantment,
 }: EnchantmentInputProps) {
-  const { name, maxLevel, level } = enchantment;
+  const { enchantments } = useAnvilContext();
+
+  const { display_name, level, max_level } = enchantment;
 
   function handleChange(e: ChangeEvent<HTMLInputElement>) {
     const value = e.target.valueAsNumber;
     const level = isNaN(value) ? 1 : value;
-    updateEnchantment(enchantment.name, level);
+    updateEnchantment(enchantment, level);
   }
 
   return (
     <>
-      <Label className="text-right">{name}</Label>
+      <Label className="text-right">{display_name}</Label>
       <div className="flex gap-1">
         <Input
           type="number"
           min={1}
-          max={maxLevel}
+          max={max_level}
           value={level}
           onChange={handleChange}
         />
         <Button
           variant="outline"
           size="icon"
-          onClick={() => deleteEnchantment(name)}
+          onClick={() => deleteEnchantment(enchantment)}
         >
           <Trash2 className="w-4 h-4" />
         </Button>
@@ -85,51 +82,53 @@ interface ItemCardProps {
 const ItemCard = forwardRef<
   HTMLDivElement,
   HTMLAttributes<HTMLDivElement> & ItemCardProps
->(({ className, item, deleteItem, ...props }, ref) => (
-  <Card
-    {...props}
-    ref={ref}
-    className="hover:scale-105 cursor-pointer select-none hover:shadow-md transition-all duration-[2s]"
-  >
-    <CardHeader>
-      <CardTitle className="flex gap-10 justify-between items-center">
-        <div className="flex gap-3 items-center">
-          <Image
-            alt=""
-            src={getItemImageUrl(item.name)}
-            className="icon"
-            width={40}
-            height={40}
-          />
-          <span>{item.name}</span>
-        </div>
-        <Button
-          variant="outline"
-          size="sm"
-          className="text-red-500 border-red-200 hover:bg-red-500"
-          onClick={() => deleteItem(item.id)}
-        >
-          X
-        </Button>
-      </CardTitle>
-      <CardDescription>Penalty: {item.anvilUses}</CardDescription>
-    </CardHeader>
-    <CardContent
-      className="flex flex-col gap-1 text-sm"
-      hidden={item.enchantments.length === 0}
+>(function ({ className, item, deleteItem, ...props }, ref) {
+  return (
+    <Card
+      {...props}
+      ref={ref}
+      className="hover:scale-105 cursor-pointer select-none hover:shadow-md transition-all duration-[2s]"
     >
-      {item.enchantments.length > 0 ? (
-        item.enchantments.map((enchantment) => (
-          <span key={enchantment.name}>
-            {enchantment.name} {toRoman(enchantment.level)}
-          </span>
-        ))
-      ) : (
-        <span className="italic text-stone-500">No enchantments.</span>
-      )}
-    </CardContent>
-  </Card>
-));
+      <CardHeader>
+        <CardTitle className="flex gap-10 justify-between items-center">
+          <div className="flex gap-3 items-center">
+            <Image
+              alt=""
+              src={`/images/items/${getIcon(item)}`}
+              className="icon"
+              width={40}
+              height={40}
+            />
+            <h3>{getItemName(item)}</h3>
+          </div>
+          <Button
+            variant="outline"
+            size="sm"
+            className="text-red-500 border-red-200 hover:bg-red-500"
+            onClick={() => deleteItem(item.id)}
+          >
+            X
+          </Button>
+        </CardTitle>
+        <CardDescription>Penalty: {item.anvilUses}</CardDescription>
+      </CardHeader>
+      <CardContent
+        className="flex flex-col gap-1 text-sm"
+        hidden={item.enchantments.length === 0}
+      >
+        {item.enchantments.length > 0 ? (
+          item.enchantments.map((enchantment) => (
+            <span key={enchantment.name}>
+              {enchantment.display_name} {toRoman(enchantment.level)}
+            </span>
+          ))
+        ) : (
+          <span className="italic text-stone-500">No enchantments.</span>
+        )}
+      </CardContent>
+    </Card>
+  );
+});
 
 ItemCard.displayName = "ItemCard";
 
@@ -144,11 +143,14 @@ export default function ActiveItemCard({
   updateItem,
   deleteItem,
 }: ActiveItemCardProps) {
-  function updateEnchantment(enchantment: MinecraftEnchantment, level: number) {
+  const [selector, setSelector] = useState<string | undefined>(undefined);
+  const { enchantments } = useAnvilContext();
+
+  function updateEnchantment(enchantment: Enchantment, level: number) {
     updateItem(item.id, {
       enchantments: [
         ...item.enchantments.map((e) => {
-          if (e.name !== enchantment) return e;
+          if (e.name !== enchantment.name) return e;
 
           return {
             ...e,
@@ -159,10 +161,10 @@ export default function ActiveItemCard({
     });
   }
 
-  function deleteEnchantment(enchantment: MinecraftEnchantment) {
+  function deleteEnchantment(enchantment: Enchantment) {
     updateItem(item.id, {
       enchantments: [
-        ...item.enchantments.filter((e) => e.name !== enchantment),
+        ...item.enchantments.filter((e) => e.name !== enchantment.name),
       ],
     });
   }
@@ -174,9 +176,9 @@ export default function ActiveItemCard({
   }
 
   function handleEnchantmentSelectorChange(value: string) {
-    const enchantment = enchantments.get(
-      value as MinecraftEnchantment
-    ) as Enchantment;
+    setSelector("");
+
+    const enchantment = enchantments.find((e) => e.name === value);
 
     if (!enchantment) return;
 
@@ -190,6 +192,11 @@ export default function ActiveItemCard({
       ],
     });
   }
+
+  const conflictingEnchants = getConflictingEnchantsforItem(
+    item,
+    enchantments
+  ).map((e) => e.name);
 
   return (
     <Popover>
@@ -217,9 +224,12 @@ export default function ActiveItemCard({
           ))}
         </div>
         <div>
-          <Select onValueChange={handleEnchantmentSelectorChange}>
+          <Select
+            value={selector}
+            onValueChange={handleEnchantmentSelectorChange}
+          >
             <SelectTrigger>
-              <SelectValue>
+              <SelectValue asChild>
                 <span className="text-slate-400">Choose an enchantment...</span>
               </SelectValue>
             </SelectTrigger>
@@ -228,24 +238,27 @@ export default function ActiveItemCard({
               className="max-h-[var(--radix-select-content-available-height)]"
             >
               <SelectGroup>
-                {getApplicableEnchantments(item.name).map(({ name }) => (
-                  <SelectItem
-                    disabled={
-                      itemHasEnchant(name, item) ||
-                      itemHasConflictingEnchant(name, item)
-                    }
-                    key={name}
-                    value={name}
-                  >
-                    {!itemHasConflictingEnchant(name, item) ? (
-                      name
-                    ) : (
-                      <div className="text-red-500 flex items-center">
-                        {name} <AlertTriangle className="ml-2" />
-                      </div>
-                    )}
-                  </SelectItem>
-                ))}
+                {getApplicableEnchantments(item, enchantments).map(
+                  (enchantment) => (
+                    <SelectItem
+                      disabled={
+                        itemHasEnchant(item, enchantment) ||
+                        conflictingEnchants.includes(enchantment.name)
+                      }
+                      key={enchantment.name}
+                      value={enchantment.name}
+                    >
+                      {!conflictingEnchants.includes(enchantment.name) ? (
+                        enchantment.display_name
+                      ) : (
+                        <div className="text-red-500 flex items-center">
+                          {enchantment.display_name}{" "}
+                          <AlertTriangle className="ml-2" />
+                        </div>
+                      )}
+                    </SelectItem>
+                  )
+                )}
               </SelectGroup>
             </SelectContent>
           </Select>

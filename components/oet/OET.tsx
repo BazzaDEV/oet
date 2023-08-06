@@ -1,32 +1,35 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AnvilSteps from "./AnvilSteps";
 import ItemPicker from "./ItemPicker";
-import { ActiveItem, MinecraftItem } from "lib/types";
+import { ActiveItem, Item } from "lib/types";
 import ActiveItemsList from "./ActiveItemsList";
 import { nanoid } from "nanoid";
-import { Alert, AlertDescription, AlertTitle } from "components/ui/alert";
-import { Terminal } from "lucide-react";
-import { useToast } from "components/ui/use-toast";
+import { AnvilContextProvider } from "hooks/useAnvil";
+import { prettyItem } from "lib/utils";
 
 export default function OET() {
-  const [items, setItems] = useState<ActiveItem[]>([]);
-  const [uniqueItem, setUniqueItem] = useState<MinecraftItem | undefined>(
-    undefined
-  );
+  const [activeItems, setActiveItems] = useState<ActiveItem[]>([]);
+  const [uniqueItem, setUniqueItem] = useState<Item | undefined>(undefined);
 
-  function handleItemPickerClick(item: MinecraftItem) {
-    if (!uniqueItem && item !== MinecraftItem.Book) {
+  useEffect(() => {
+    // console.log("Active items:");
+    // activeItems.forEach((i) => console.log(prettyItem(i)));
+    // console.log("\n\n");
+  }, [activeItems]);
+
+  function handleItemPickerClick(item: Item) {
+    if (!uniqueItem && item.name !== "book") {
       console.log("Setting unique item to", item);
       setUniqueItem(item);
     }
 
-    setItems([
-      ...items,
+    setActiveItems([
+      ...activeItems,
       {
         id: nanoid(),
-        name: item,
+        name: item.name,
         enchantments: [],
         anvilUses: 0,
       },
@@ -34,8 +37,8 @@ export default function OET() {
   }
 
   function updateItem(id: string, updatedItem: Partial<ActiveItem>) {
-    setItems(
-      items.map((i) => {
+    setActiveItems(
+      activeItems.map((i) => {
         if (i.id !== id) {
           return i;
         }
@@ -49,52 +52,44 @@ export default function OET() {
   }
 
   function deleteItem(id: string) {
-    const deletedItem = items.find((i) => i.id === id);
-    setItems(items.filter((i) => i.id !== id));
+    const deletedItem = activeItems.find((i) => i.id === id);
+    setActiveItems(activeItems.filter((i) => i.id !== id));
 
-    if (uniqueItem === deletedItem?.name) {
+    if (uniqueItem?.name === deletedItem?.name) {
       setUniqueItem(undefined);
     }
   }
 
   return (
-    <div className="flex flex-col gap-10">
-      <div className="flex flex-col gap-5">
-        <h2 className="text-center text-2xl">
-          <span className="font-semibold">(1)</span> Choose Items
-        </h2>
-        <ItemPicker
-          items={items}
-          uniqueItem={uniqueItem}
-          onItemClick={handleItemPickerClick}
-        />
+    <AnvilContextProvider>
+      <div className="flex flex-col gap-10">
+        <div className="flex flex-col gap-5">
+          <h2 className="text-center">
+            <span className="font-semibold">(1)</span> Choose Items
+          </h2>
+          <ItemPicker
+            // items={activeItems}
+            uniqueItem={uniqueItem}
+            onItemClick={handleItemPickerClick}
+          />
+        </div>
+        <div className="flex flex-col gap-5">
+          <h2 className="text-center">
+            <span className="font-semibold">(2)</span> Add Enchantments
+          </h2>
+          <ActiveItemsList
+            items={activeItems}
+            updateItem={updateItem}
+            deleteItem={deleteItem}
+          />
+        </div>
+        <div className="flex flex-col gap-5">
+          <h2 className="text-center">
+            <span className="font-semibold">(3)</span> Combine!
+          </h2>
+          <AnvilSteps items={activeItems} />
+        </div>
       </div>
-      <div className="flex flex-col gap-5">
-        <h2 className="text-center text-2xl">
-          <span className="font-semibold">(2)</span> Add Enchantments
-        </h2>
-        {/* <Alert className="max-w-[700px] mx-auto">
-          <Terminal className="h-4 w-4" />
-          <AlertTitle className="font-semibold tracking-tighter">
-            Warnings!
-          </AlertTitle>
-          <AlertDescription>
-            This is a safe space to outline some warnings regarding the chosen
-            items and/or enchantments.
-          </AlertDescription>
-        </Alert> */}
-        <ActiveItemsList
-          items={items}
-          updateItem={updateItem}
-          deleteItem={deleteItem}
-        />
-      </div>
-      <div className="flex flex-col gap-5">
-        <h2 className="text-center text-2xl">
-          <span className="font-semibold">(3)</span> Combine!
-        </h2>
-        <AnvilSteps items={items} />
-      </div>
-    </div>
+    </AnvilContextProvider>
   );
 }

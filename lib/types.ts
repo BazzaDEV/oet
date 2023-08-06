@@ -1,92 +1,67 @@
 export enum MinecraftEdition {
-  Bedrock,
-  Java,
+  Java = "java",
+  Bedrock = "bedrock",
 }
 
-export enum MinecraftEnchantment {
-  Protection = "Protection",
-  FireProtection = "Fire Protection",
-  FeatherFalling = "Feather Falling",
-  BlastProtection = "Blast Protection",
-  ProjectileProtection = "Projectile Protection",
-  Thorns = "Thorns",
-  Respiration = "Respiration",
-  DepthStrider = "Depth Strider",
-  AquaAffinity = "Aqua Affinity",
-  Sharpness = "Sharpness",
-  Smite = "Smite",
-  BaneOfArthropods = "Bane of Arthropods",
-  Knockback = "Knockback",
-  FireAspect = "Fire Aspect",
-  Looting = "Looting",
-  Efficiency = "Efficiency",
-  SilkTouch = "Silk Touch",
-  Unbreaking = "Unbreaking",
-  Fortune = "Fortune",
-  Power = "Power",
-  Punch = "Punch",
-  Flame = "Flame",
-  Infinity = "Infinity",
-  LuckOfTheSea = "Luck of the Sea",
-  Lure = "Lure",
-  FrostWalker = "Frost Walker",
-  Mending = "Mending",
-  CurseOfBinding = "Curse of Binding",
-  CurseOfVanishing = "Curse of Vanishing",
-  Impaling = "Impaling",
-  Riptide = "Riptide",
-  Loyalty = "Loyalty",
-  Channeling = "Channeling",
-  Multishot = "Multishot",
-  Piercing = "Piercing",
-  QuickCharge = "Quick Charge",
-  SoulSpeed = "Soul Speed",
-  SwiftSneak = "Swift Sneak",
-  SweepingEdge = "Sweeping Edge",
-}
-
-export enum MinecraftItem {
-  Book = "Book",
-  Helmet = "Helmet",
-  Chestplate = "Chestplate",
-  Leggings = "Leggings",
-  Boots = "Boots",
-  Sword = "Sword",
-  Axe = "Axe",
-  Pickaxe = "Pickaxe",
-  Shovel = "Shovel",
-  Hoe = "Hoe",
-  Shears = "Shears",
-  FishingRod = "Fishing Rod",
-  FlintAndSteel = "Flint and Steel",
-  Elytra = "Elytra",
-  Trident = "Trident",
-  Crossbow = "Crossbow",
-  Bow = "Bow",
-  Shield = "Shield",
-}
-
-export type Enchantment = {
-  name: MinecraftEnchantment;
-  maxLevel: number;
-  editions: Set<MinecraftEdition>;
-  itemMultiplier: number | Map<MinecraftEdition, number>;
-  bookMultiplier: number | Map<MinecraftEdition, number>;
-  incompatibleEnchantments?: MinecraftEnchantment[];
-  appliesTo: MinecraftItem[];
+export type Data = {
+  // items: ItemData[];
+  enchantments: EnchantmentDetails[];
+  edition: MinecraftEdition;
 };
 
-export type Item = {
-  name: MinecraftItem;
+// From the database (eg. JSON file)
+export type ItemData = {
+  name: string;
+  display_name: string;
+  icon: string;
 };
 
+// From the database (eg. JSON file)
+export type EnchantmentData = {
+  name: string;
+  display_name: string;
+  max_level: number;
+  editions: MinecraftEdition[];
+  item_multiplier: number;
+  book_multiplier: number;
+  incompatible_with?: string[];
+  applies_to: string[];
+  overrides?: {
+    bedrock?: Omit<EnchantmentData, "overrides">;
+    java?: Omit<EnchantmentData, "overrides">;
+  };
+};
+
+// Only store name by default
+export type Enchantment = Pick<EnchantmentData, "name">;
+
+// Only store name by default
+export type Item = Pick<ItemData, "name">;
+
+// Details for the item - will be the same as ItemData
+export type ItemDetails = ItemData;
+// Details for the enchantment - this type will have enchantment details with
+// the edition-specific overrides already applied (hence dropping the field)
+export type EnchantmentDetails = Omit<
+  EnchantmentData,
+  "overrides" | "editions"
+>;
+
+// ActiveItem is an item that the user is combining in an anvil.
+// It has a unique id, the enchantments applied to it, and the # of anvil uses.
 export type ActiveItem = Item & {
   id: string;
   enchantments: ActiveEnchantment[];
   anvilUses: number;
 };
 
-export type ActiveEnchantment = Enchantment & {
+// ActiveEnchantment is an enchantment that is being applied to an ActiveItem.
+// It has all the properties of a generic enchantment (name), as well as
+// the current level of the enchantment.
+export type ActiveEnchantment = Pick<
+  EnchantmentDetails,
+  "name" | "display_name" | "max_level"
+> & {
   level: number;
 };
 

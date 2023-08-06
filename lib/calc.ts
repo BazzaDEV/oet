@@ -3,46 +3,64 @@ import {
   ActiveItem,
   AnvilCombination,
   AnvilStep,
-  Enchantment,
+  Data,
   MinecraftEdition,
-  MinecraftEnchantment,
-  MinecraftItem,
 } from "./types";
 
-import { cloneDeep, minBy } from "lodash";
+import { cloneDeep, drop, reduce } from "lodash";
+import {
+  getAllIncompatibleEnchantments,
+  getMultiplier,
+  isEqual,
+  isEqualOrBetter,
+} from "lib/enchantments";
+import { permute, prettyEnchant, prettyEnchants, prettyItem } from "./utils";
 
-function getAllPermutations(items: ActiveItem[]) {
-  const result: ActiveItem[][] = [];
-
-  function permute(arr: ActiveItem[], m: ActiveItem[] = []) {
-    if (arr.length === 0) {
-      result.push(cloneDeep(m));
-    } else {
-      for (let i = 0; i < arr.length; i++) {
-        const curr = arr.slice();
-        const next = curr.splice(i, 1);
-        permute(curr.slice(), m.concat(next));
-      }
-    }
-  }
-
-  permute(items);
-
-  return result;
+function getPermutations(items: ActiveItem[]): ActiveItem[][] {
+  const permutations = permute<ActiveItem>(items);
+  return keepValidPermutations(permutations);
 }
 
-export function getAllCombinations(items: ActiveItem[]) {
-  const permutations = getAllPermutations(items);
-  const itemPermutations = permutations.map((p) => p.map((i) => i.name));
+export function keepValidPermutations(
+  permutations: ActiveItem[][]
+): ActiveItem[][] {
+  return permutations.filter((permutation) => {
+    const items = permutation.map((item) => item.name);
+
+    const [_, error] = reduce(
+      drop(items),
+      ([target, error], sacrifice) => {
+        if (error || target === sacrifice || sacrifice === "book") {
+          return [target, error];
+        }
+
+        return ["", true];
+      },
+      [items[0], false]
+    );
+
+    return !error;
+  });
+}
+
+export function getAnvilCombinations(items: ActiveItem[], data: Data) {
+  const permutations = getPermutations(items);
+
+  // console.log("Permutations:");
+  // permutations.forEach((p) => {
+  //   p.forEach((i) => console.log(prettyItem(i)));
+  //   console.log("\n\n");
+  // });
 
   const combinations: AnvilCombination[] = [];
-
   for (const p of permutations) {
     let cost = 0;
     const steps: AnvilStep[] = [];
 
     while (p.length > 1) {
-      const step = anvil(p[0], p[1], MinecraftEdition.Java);
+      const step = anvil(p[0], p[1], data);
+
+      // console.log(step);
 
       cost += step.cost;
       steps.push(step);
@@ -58,28 +76,42 @@ export function getAllCombinations(items: ActiveItem[]) {
     });
   }
 
+  // console.log(combinations.map((c) => c.finalItem));
+
   return combinations;
 }
 
-export function getBestCombination(items: ActiveItem[]) {
-  const combinations = getAllCombinations(items);
-  return minBy(combinations, (c) => c.finalCost);
+export function getBestAnvilCombination(items: ActiveItem[], data: Data) {
+  const combinations = getAnvilCombinations(items, data);
+  return combinations.reduce((best, curr) => {
+    const bestEnchants = best.finalItem.enchantments;
+    const currEnchants = curr.finalItem.enchantments;
+
+    if (
+      isEqualOrBetter(bestEnchants, currEnchants) ||
+      (isEqual(bestEnchants, currEnchants) && best.finalCost < curr.finalCost)
+    ) {
+      return best;
+    } else {
+      return curr;
+    }
+  }, combinations[0]);
 }
 
-function anvil(
+export function anvil(
   targetItem: ActiveItem,
   sacrificeItem: ActiveItem,
-  edition: MinecraftEdition
+  data: Data
 ) {
   const anvilUses = Math.max(targetItem.anvilUses, sacrificeItem.anvilUses) + 1;
 
   const { enchantingCost, resultingEnchants } = combineEnchantments(
     targetItem,
     sacrificeItem,
-    edition
+    data
   );
 
-  const resultingItem = { ...targetItem };
+  const resultingItem = cloneDeep(targetItem);
   resultingItem.anvilUses = anvilUses;
   resultingItem.enchantments = resultingEnchants;
 
@@ -89,121 +121,135 @@ function anvil(
     targetPriorWorkPenalty + sacrificePriorWorkPenalty + enchantingCost;
 
   const step: AnvilStep = {
-    targetItem,
-    sacrificeItem,
-    resultingItem,
+    targetItem: cloneDeep(targetItem),
+    sacrificeItem: cloneDeep(sacrificeItem),
+    resultingItem: cloneDeep(resultingItem),
     cost,
   };
 
   return step;
 }
 
-function combineEnchantments(
+export function combineEnchantments(
   targetItem: ActiveItem,
   sacrificeItem: ActiveItem,
-  edition: MinecraftEdition
+  data: Data
 ) {
   const targetEnchants = targetItem.enchantments;
   const sacrificeEnchants = sacrificeItem.enchantments;
 
+  // console.log("Target ITEM:", targetItem);
+  // console.log("Sacrifice ITEM:", sacrificeItem);
+
+  // console.log("Combining these enchantments:");
+  // console.log("Target:", prettyEnchants(targetEnchants));
+  // console.log("Sacrifice:", prettyEnchants(sacrificeEnchants));
+
   let enchantingCost = 0;
 
-  const resultingEnchants: ActiveEnchantment[] = [...targetEnchants];
+  let resultingEnchants: ActiveEnchantment[] = cloneDeep(targetEnchants);
+  for (const sacrificeEnchant of sacrificeEnchants) {
+    const matchingEnchant = cloneDeep(
+      resultingEnchants.find((e) => e.name === sacrificeEnchant.name)
+    );
 
-  sacrificeEnchants.forEach((sEnchant) => {
-    const tEnchant = targetEnchants.find((e) => e.name === sEnchant.name);
-    const resEnchant: ActiveEnchantment = { ...sEnchant };
+    if (!matchingEnchant) {
+      // Sacrifice enchantment does not have matching enchantment on the target item.
+      // This enchantment is unique from the sacrifice item.
+      // Add to the combined enchantments if target does not already have a conflicting enchantment.
 
-    if (!tEnchant) {
-      // Target does not have matching enchant
-      // Add all levels unless incompatible with existing enchant on target
-      const incompatibleEnchants =
-        getAllIncompatibleEnchantments(targetEnchants);
+      // console.log("Target does not have", prettyEnchant(sacrificeEnchant));
 
-      if (incompatibleEnchants.has(sEnchant.name)) {
-        enchantingCost++;
-        return;
-      }
+      const incompatibleEnchantOnTarget = getAllIncompatibleEnchantments(
+        resultingEnchants,
+        data.enchantments
+      ).find((e) => e.name === sacrificeEnchant.name);
 
-      const bookMultiplier =
-        resEnchant.bookMultiplier instanceof Map
-          ? (resEnchant.bookMultiplier.get(edition) as number)
-          : resEnchant.bookMultiplier;
-      const itemMultiplier =
-        resEnchant.itemMultiplier instanceof Map
-          ? (resEnchant.itemMultiplier.get(edition) as number)
-          : resEnchant.itemMultiplier;
-
-      const multiplier =
-        sacrificeItem.name === MinecraftItem.Book
-          ? bookMultiplier
-          : itemMultiplier;
-
-      enchantingCost += resEnchant.level * multiplier;
-
-      resultingEnchants.push(resEnchant);
-      return;
-    }
-
-    const bookMultiplier =
-      resEnchant.bookMultiplier instanceof Map
-        ? (resEnchant.bookMultiplier.get(edition) as number)
-        : resEnchant.bookMultiplier;
-    const itemMultiplier =
-      resEnchant.itemMultiplier instanceof Map
-        ? (resEnchant.itemMultiplier.get(edition) as number)
-        : resEnchant.itemMultiplier;
-
-    const multiplier =
-      sacrificeItem.name === MinecraftItem.Book
-        ? bookMultiplier
-        : itemMultiplier;
-
-    if (sEnchant.level > tEnchant.level) {
-      // Sacrifice level is greater
-      // Raise target to sacrifice's level
-      resEnchant.level = sEnchant.level;
-
-      if (MinecraftEdition.Java) {
-        enchantingCost += resEnchant.level * multiplier;
+      if (incompatibleEnchantOnTarget) {
+        enchantingCost += 1;
       } else {
-        enchantingCost += (resEnchant.level - tEnchant.level) * multiplier;
-      }
-    } else if (
-      sEnchant.level === tEnchant.level &&
-      tEnchant.level < tEnchant.maxLevel
-    ) {
-      // Sacrifice level is equal
-      // Raise target by one level unless already at max level
-      resEnchant.level = tEnchant.level + 1;
+        const multiplier = getMultiplier(
+          sacrificeItem,
+          sacrificeEnchant,
+          data.enchantments
+        );
 
-      if (MinecraftEdition.Java) {
-        enchantingCost += resEnchant.level * multiplier;
-      } else {
-        enchantingCost += (resEnchant.level - tEnchant.level) * multiplier;
+        enchantingCost += sacrificeEnchant.level * multiplier;
+        resultingEnchants.push(cloneDeep(sacrificeEnchant));
+        // console.log(prettyEnchant(sacrificeEnchant), "is compatible. Adding to final item.");
       }
     } else {
-      // Sacrifice level is less
-      // Nothing changes on target
-      resEnchant.level = tEnchant.level + 1;
-    }
+      // Sacrifice has a matching enchantment on the target item.
+      // Figure out what the level of the shared enchantment on the combined item should be.
 
-    return resultingEnchants.map((rEnchant) =>
-      rEnchant.name === resEnchant.name ? { ...resEnchant } : rEnchant
-    );
-  });
+      // console.log(
+      //   "Target has matching enchant",
+      //   prettyEnchant(matchingEnchant),
+      //   "with level",
+      //   matchingEnchant.level
+      // );
+
+      const multiplier = getMultiplier(
+        sacrificeItem,
+        sacrificeEnchant,
+        data.enchantments
+      );
+
+      const targetOriginalEnchantLevel = matchingEnchant.level;
+
+      if (matchingEnchant.level < sacrificeEnchant.level) {
+        // Sacrifice level is greater
+        // Raise combined enchantment to sacrifice's level
+        matchingEnchant.level = sacrificeEnchant.level;
+        // console.log("Sacrifice level is greater - raised to", matchingEnchant.level);
+      } else if (matchingEnchant.level === sacrificeEnchant.level) {
+        // Target and sacrifice enchantments have the same level
+        // Bump the combined enchantment level by incrementing by 1.
+        matchingEnchant.level =
+          matchingEnchant.level < matchingEnchant.max_level
+            ? (matchingEnchant.level += 1)
+            : matchingEnchant.max_level;
+        // console.log("Sacrifice level is equal - increment to", matchingEnchant.level);
+      } else {
+        // Sacrifice enchantment level is less than that of the matching enchantment on the target.
+        // Keep target enchantment the same.
+        // console.log("Sacrifice level is less - keep combined enchantment at target level", matchingEnchant.level);
+      }
+
+      if (data.edition === MinecraftEdition.Java) {
+        enchantingCost += matchingEnchant.level * multiplier;
+      } else {
+        enchantingCost +=
+          (matchingEnchant.level - targetOriginalEnchantLevel) * multiplier;
+      }
+
+      // console.log(
+      //   "Added matching enchantment",
+      //   prettyEnchant(matchingEnchant),
+      //   "to final item."
+      // );
+
+      resultingEnchants = resultingEnchants.map((e) =>
+        e.name === matchingEnchant.name
+          ? { ...e, level: matchingEnchant.level }
+          : e
+      );
+
+      // console.log(
+      //   "Current final item enchantments:",
+      //   prettyEnchants(resultingEnchants)
+      // );
+    }
+  }
+
+  // console.log(
+  //   "FINAL RESULT of COMBINING ENCHANTS:",
+  //   prettyEnchants(resultingEnchants),
+  //   "with cost",
+  //   enchantingCost
+  // );
+
+  // console.log("Total cost:", enchantingCost, "\n");
 
   return { resultingEnchants, enchantingCost };
-}
-
-function getAllIncompatibleEnchantments(enchantments: Enchantment[]) {
-  const accumulator = new Set<MinecraftEnchantment>();
-
-  enchantments.forEach((e) =>
-    e.incompatibleEnchantments?.forEach((enchantment) =>
-      accumulator.add(enchantment)
-    )
-  );
-
-  return accumulator;
 }

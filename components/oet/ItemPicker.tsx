@@ -1,23 +1,19 @@
-"use client";
-
-import { Button } from "components/ui/button";
-import { Card, CardHeader, CardTitle } from "components/ui/card";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "components/ui/tooltip";
-import { itemIcons } from "lib/data";
+import { getItems } from "lib/items";
 
-import { ActiveItem, MinecraftItem } from "lib/types";
-import { cn, getItemImageUrl } from "lib/utils";
+import { Item } from "lib/types";
+import { cn } from "lib/utils";
 import Image from "next/image";
 
 interface ItemPickerCardProps {
-  item: MinecraftItem;
+  item: Item;
   imageUrl: string;
-  onClick: (item: MinecraftItem) => void;
+  onClick: (item: Item) => void;
   disabled?: boolean;
 }
 
@@ -44,7 +40,7 @@ function ItemPickerCard({
       onClick={() => onClick(item)}
     >
       <Image
-        alt={item}
+        alt={item.name}
         src={imageUrl}
         width={30}
         height={30}
@@ -58,36 +54,35 @@ function ItemPickerCard({
 }
 
 interface ItemPickerProps {
-  items: ActiveItem[];
-  uniqueItem?: MinecraftItem;
-  onItemClick: (item: MinecraftItem) => void;
+  // items: ActiveItem[];
+  uniqueItem?: Item;
+  onItemClick: (item: Item) => void;
 }
 
 export default function ItemPicker({
-  items,
+  // items,
   uniqueItem,
   onItemClick,
 }: ItemPickerProps) {
   return (
     <div className="flex flex-wrap justify-center gap-2">
-      {Array.from(itemIcons).map(([key, val]) => (
-        <TooltipProvider key={val.name} delayDuration={100}>
+      {getItems().map((item) => (
+        <TooltipProvider key={item.name} delayDuration={100}>
           <Tooltip>
             <TooltipTrigger>
               <ItemPickerCard
-                item={key}
-                imageUrl={getItemImageUrl(key)}
+                item={{ name: item.name }}
+                imageUrl={`/images/items/${item.icon}`}
                 onClick={onItemClick}
                 disabled={
-                  items.length >= 5 ||
-                  (key !== MinecraftItem.Book &&
-                    uniqueItem &&
-                    uniqueItem !== key)
+                  item.name !== "book" &&
+                  uniqueItem &&
+                  uniqueItem.name !== item.name
                 }
               />
             </TooltipTrigger>
             <TooltipContent className="select-none">
-              <span>{key}</span>
+              <span>{item.display_name}</span>
             </TooltipContent>
           </Tooltip>
         </TooltipProvider>
