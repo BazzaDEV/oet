@@ -99,7 +99,7 @@ const ItemCard = forwardRef<
               width={40}
               height={40}
             />
-            <h3>{getItemName(item)}</h3>
+            <h4>{getItemName(item)}</h4>
           </div>
           <Button
             variant="outline"

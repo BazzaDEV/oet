@@ -14,14 +14,22 @@ export default function ActiveItemsList({
 }: ActiveItemsListProps) {
   return (
     <div className="flex flex-wrap gap-3 justify-center">
-      {items.map((i) => (
-        <ActiveItemCard
-          key={i.id}
-          item={i}
-          updateItem={updateItem}
-          deleteItem={deleteItem}
-        />
-      ))}
+      {items.length > 0 ? (
+        items.map((i) => (
+          <ActiveItemCard
+            key={i.id}
+            item={i}
+            updateItem={updateItem}
+            deleteItem={deleteItem}
+          />
+        ))
+      ) : (
+        <div className="flex flex-col gap-2 text-center">
+          <span className="italic">{"You haven't picked any items yet!"}</span>
+
+          <span>Start by clicking an item from the list above.</span>
+        </div>
+      )}
     </div>
   );
 }

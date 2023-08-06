@@ -28,9 +28,21 @@ export default function AnvilSteps({ items }: AnvilStepsProps) {
 
   return (
     <div className="flex flex-col gap-4">
-      {combination?.steps.map((step, index) => (
-        <AnvilStep key={index} step={step} stepNumber={index + 1} />
-      ))}
+      {combination && combination.steps.length > 0 ? (
+        combination.steps.map((step, index) => (
+          <AnvilStep key={index} step={step} stepNumber={index + 1} />
+        ))
+      ) : (
+        <div className="flex flex-col gap-2 text-center">
+          <span className="italic">
+            The optimal enchantment order for your chosen items will appear
+            here.
+          </span>
+          <span>
+            Start by picking a few items and give them some enchantments.
+          </span>
+        </div>
+      )}
     </div>
   );
 }
@@ -51,7 +63,7 @@ function AnvilItem({ item }: AnvilItemProps) {
             width={40}
             height={40}
           />
-          <h3>{getItemName(item)}</h3>
+          <h4>{getItemName(item)}</h4>
         </CardTitle>
         <CardDescription className="text-center">
           Anvil Uses: {item.anvilUses}
@@ -83,7 +95,7 @@ interface AnvilStepProps {
 function AnvilStep({ step, stepNumber }: AnvilStepProps) {
   const { targetItem, sacrificeItem, resultingItem, cost } = step;
   return (
-    <div className="m-auto">
+    <div className="m-auto border p-4 rounded-lg">
       <h3>
         Step {stepNumber} <i className="text-slate-500">({step.cost} levels)</i>
       </h3>
