@@ -41,27 +41,33 @@ function EnchantmentInput({
   updateEnchantment,
   deleteEnchantment,
 }: EnchantmentInputProps) {
-  const { enchantments } = useAnvilContext();
+  const [level, setLevel] = useState<number>(1);
+  const { display_name, max_level } = enchantment;
 
-  const { display_name, level, max_level } = enchantment;
-
-  function handleChange(e: ChangeEvent<HTMLInputElement>) {
-    const value = e.target.valueAsNumber;
-    const level = isNaN(value) ? 1 : value;
-    updateEnchantment(enchantment, level);
+  function handleChange(value: string) {
+    const newLevel = Number(value);
+    if (newLevel > 0 && newLevel <= max_level) {
+      updateEnchantment(enchantment, newLevel);
+      setLevel(newLevel);
+    }
   }
 
   return (
     <>
       <Label className="text-right">{display_name}</Label>
       <div className="flex gap-1">
-        <Input
-          type="number"
-          min={1}
-          max={max_level}
-          value={level}
-          onChange={handleChange}
-        />
+        <Select value={level.toString()} onValueChange={handleChange}>
+          <SelectTrigger>
+            <SelectValue>{level}</SelectValue>
+          </SelectTrigger>
+          <SelectContent>
+            {[...Array(max_level + 1).keys()].slice(1).map((i) => (
+              <SelectItem key={i} value={String(i)}>
+                {i}
+              </SelectItem>
+            ))}
+          </SelectContent>
+        </Select>
         <Button
           variant="outline"
           size="icon"
