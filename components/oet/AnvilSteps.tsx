@@ -34,11 +34,11 @@ export default function AnvilSteps({ items }: AnvilStepsProps) {
         ))
       ) : (
         <div className="flex flex-col gap-2 text-center">
-          <span className="italic">
+          <span className="italic text-slate-600">
             The optimal enchantment order for your chosen items will appear
             here.
           </span>
-          <span>
+          <span className="text-slate-500">
             Start by picking a few items and give them some enchantments.
           </span>
         </div>

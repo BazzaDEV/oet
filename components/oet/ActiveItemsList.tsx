@@ -25,9 +25,13 @@ export default function ActiveItemsList({
         ))
       ) : (
         <div className="flex flex-col gap-2 text-center">
-          <span className="italic">{"You haven't picked any items yet!"}</span>
+          <span className="italic text-slate-600">
+            {"You haven't picked any items yet!"}
+          </span>
 
-          <span>Start by clicking an item from the list above.</span>
+          <span className="text-slate-500">
+            Start by clicking an item from the list above.
+          </span>
         </div>
       )}
     </div>
