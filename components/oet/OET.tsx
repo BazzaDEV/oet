@@ -17,6 +17,7 @@ export default function OET() {
     // console.log("Active items:");
     // activeItems.forEach((i) => console.log(prettyItem(i)));
     // console.log("\n\n");
+    console.log(activeItems);
   }, [activeItems]);
 
   function handleItemPickerClick(item: Item) {

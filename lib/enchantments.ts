@@ -10,7 +10,6 @@ import {
 } from "lib/types";
 import enchantments from "lib/data/enchantments.json";
 import { filter, omit } from "lodash";
-import { match } from "assert";
 
 export function getEnchantments(edition: MinecraftEdition) {
   function applyOverrides(e: EnchantmentData): EnchantmentDetails {
@@ -144,5 +143,15 @@ export function isEqual(E1: ActiveEnchantment[], E2: ActiveEnchantment[]) {
       const matchingEnchant = E2.find((e2) => e2.name === e1.name);
       return matchingEnchant && e1.level === matchingEnchant.level;
     })
+  );
+}
+
+export function isApplicableToItem(
+  enchantment: Enchantment,
+  item: Item,
+  enchantments: EnchantmentDetails[]
+) {
+  return getEnchantment(enchantment, enchantments).applies_to.includes(
+    item.name
   );
 }

@@ -11,10 +11,11 @@ import { cloneDeep, drop, reduce } from "lodash";
 import {
   getAllIncompatibleEnchantments,
   getMultiplier,
+  isApplicableToItem,
   isEqual,
   isEqualOrBetter,
 } from "lib/enchantments";
-import { permute, prettyEnchant, prettyEnchants, prettyItem } from "./utils";
+import { permute } from "./utils";
 
 function getPermutations(items: ActiveItem[]): ActiveItem[][] {
   const permutations = permute<ActiveItem>(items);
@@ -46,43 +47,49 @@ export function keepValidPermutations(
 export function getAnvilCombinations(items: ActiveItem[], data: Data) {
   const permutations = getPermutations(items);
 
-  // console.log("Permutations:");
-  // permutations.forEach((p) => {
-  //   p.forEach((i) => console.log(prettyItem(i)));
-  //   console.log("\n\n");
-  // });
-
   const combinations: AnvilCombination[] = [];
   for (const p of permutations) {
+    let error = undefined;
     let cost = 0;
+    let stepNumber = 1;
     const steps: AnvilStep[] = [];
 
     while (p.length > 1) {
       const step = anvil(p[0], p[1], data);
 
-      // console.log(step);
+      if (step.error) {
+        error = { atStep: stepNumber };
+        break;
+      }
 
       cost += step.cost;
       steps.push(step);
 
       p.shift();
       p[0] = cloneDeep(step.resultingItem);
+      stepNumber++;
     }
 
-    combinations.push({
+    const anvilCombination = {
       finalItem: p[0],
       finalCost: cost,
       steps,
-    });
-  }
+      error,
+    };
 
-  // console.log(combinations.map((c) => c.finalItem));
+    combinations.push(anvilCombination);
+  }
 
   return combinations;
 }
 
 export function getBestAnvilCombination(items: ActiveItem[], data: Data) {
   const combinations = getAnvilCombinations(items, data);
+
+  if (combinations.every((c) => c.error !== undefined)) {
+    return null;
+  }
+
   return combinations.reduce((best, curr) => {
     const bestEnchants = best.finalItem.enchantments;
     const currEnchants = curr.finalItem.enchantments;
@@ -111,6 +118,16 @@ export function anvil(
     data
   );
 
+  if (isEqual(targetItem.enchantments, resultingEnchants)) {
+    return {
+      targetItem,
+      sacrificeItem,
+      resultingItem: targetItem,
+      cost: enchantingCost,
+      error: true,
+    };
+  }
+
   const resultingItem = cloneDeep(targetItem);
   resultingItem.anvilUses = anvilUses;
   resultingItem.enchantments = resultingEnchants;
@@ -138,13 +155,6 @@ export function combineEnchantments(
   const targetEnchants = targetItem.enchantments;
   const sacrificeEnchants = sacrificeItem.enchantments;
 
-  // console.log("Target ITEM:", targetItem);
-  // console.log("Sacrifice ITEM:", sacrificeItem);
-
-  // console.log("Combining these enchantments:");
-  // console.log("Target:", prettyEnchants(targetEnchants));
-  // console.log("Sacrifice:", prettyEnchants(sacrificeEnchants));
-
   let enchantingCost = 0;
 
   let resultingEnchants: ActiveEnchantment[] = cloneDeep(targetEnchants);
@@ -158,14 +168,15 @@ export function combineEnchantments(
       // This enchantment is unique from the sacrifice item.
       // Add to the combined enchantments if target does not already have a conflicting enchantment.
 
-      // console.log("Target does not have", prettyEnchant(sacrificeEnchant));
-
       const incompatibleEnchantOnTarget = getAllIncompatibleEnchantments(
         resultingEnchants,
         data.enchantments
       ).find((e) => e.name === sacrificeEnchant.name);
 
-      if (incompatibleEnchantOnTarget) {
+      if (
+        incompatibleEnchantOnTarget ||
+        !isApplicableToItem(sacrificeEnchant, targetItem, data.enchantments)
+      ) {
         enchantingCost += 1;
       } else {
         const multiplier = getMultiplier(
@@ -182,13 +193,6 @@ export function combineEnchantments(
       // Sacrifice has a matching enchantment on the target item.
       // Figure out what the level of the shared enchantment on the combined item should be.
 
-      // console.log(
-      //   "Target has matching enchant",
-      //   prettyEnchant(matchingEnchant),
-      //   "with level",
-      //   matchingEnchant.level
-      // );
-
       const multiplier = getMultiplier(
         sacrificeItem,
         sacrificeEnchant,
@@ -201,7 +205,6 @@ export function combineEnchantments(
         // Sacrifice level is greater
         // Raise combined enchantment to sacrifice's level
         matchingEnchant.level = sacrificeEnchant.level;
-        // console.log("Sacrifice level is greater - raised to", matchingEnchant.level);
       } else if (matchingEnchant.level === sacrificeEnchant.level) {
         // Target and sacrifice enchantments have the same level
         // Bump the combined enchantment level by incrementing by 1.
@@ -209,11 +212,9 @@ export function combineEnchantments(
           matchingEnchant.level < matchingEnchant.max_level
             ? (matchingEnchant.level += 1)
             : matchingEnchant.max_level;
-        // console.log("Sacrifice level is equal - increment to", matchingEnchant.level);
       } else {
         // Sacrifice enchantment level is less than that of the matching enchantment on the target.
         // Keep target enchantment the same.
-        // console.log("Sacrifice level is less - keep combined enchantment at target level", matchingEnchant.level);
       }
 
       if (data.edition === MinecraftEdition.Java) {
@@ -223,33 +224,13 @@ export function combineEnchantments(
           (matchingEnchant.level - targetOriginalEnchantLevel) * multiplier;
       }
 
-      // console.log(
-      //   "Added matching enchantment",
-      //   prettyEnchant(matchingEnchant),
-      //   "to final item."
-      // );
-
       resultingEnchants = resultingEnchants.map((e) =>
         e.name === matchingEnchant.name
           ? { ...e, level: matchingEnchant.level }
           : e
       );
-
-      // console.log(
-      //   "Current final item enchantments:",
-      //   prettyEnchants(resultingEnchants)
-      // );
     }
   }
-
-  // console.log(
-  //   "FINAL RESULT of COMBINING ENCHANTS:",
-  //   prettyEnchants(resultingEnchants),
-  //   "with cost",
-  //   enchantingCost
-  // );
-
-  // console.log("Total cost:", enchantingCost, "\n");
 
   return { resultingEnchants, enchantingCost };
 }

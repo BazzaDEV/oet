@@ -105,12 +105,5 @@ describe("Enchantments", () => {
     });
   });
 
-  // describe("Get incompatible enchantments", () => {
-  //   const enchantment: Enchantment = {
-  //     name: "silk_touch",
-  //   };
-
-  //   const java
-
-  // });
+  describe("Get incompatible enchantments", () => {});
 });

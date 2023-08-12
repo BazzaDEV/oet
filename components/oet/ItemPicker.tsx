@@ -24,7 +24,7 @@ function ItemPickerCard({
   disabled,
 }: ItemPickerCardProps) {
   const cardStyles =
-    "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-800";
+    "inline-flex items-center justify-center rounded-md text-sm font-medium ring-offset-white transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-400 focus-visible:ring-offset-2 dark:ring-offset-slate-950 dark:focus-visible:ring-slate-800 shadow-sm";
   const outlineStyles =
     "border border-slate-200 bg-white hover:bg-slate-100 hover:text-slate-900 dark:border-slate-800 dark:bg-slate-950 dark:hover:bg-slate-800 dark:hover:text-slate-50";
   const disabledStyles = "pointer-events-none opacity-50";
@@ -35,7 +35,7 @@ function ItemPickerCard({
         cardStyles,
         outlineStyles,
         disabled && disabledStyles,
-        "p-1 hover:scale-110"
+        "p-1 hover:scale-110 duration-2000 transition-all"
       )}
       onClick={() => onClick(item)}
     >

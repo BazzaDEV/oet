@@ -54,7 +54,6 @@ export function permute<T>(arr: T[]) {
     for (let i = 0; i < bag.length; i++) {
       const newCurr = cloneDeep(curr);
       newCurr.push(bag[i]);
-      // console.log(newCurr);
       if (i === 0) {
         rec(slice(bag, 1), newCurr, res);
       } else if (i === arr.length - 1) {

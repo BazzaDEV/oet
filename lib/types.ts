@@ -70,10 +70,14 @@ export type AnvilStep = {
   sacrificeItem: ActiveItem;
   resultingItem: ActiveItem;
   cost: number;
+  error?: boolean;
 };
 
 export type AnvilCombination = {
   finalItem: ActiveItem;
   finalCost: number;
   steps: AnvilStep[];
+  error?: {
+    atStep: number;
+  };
 };

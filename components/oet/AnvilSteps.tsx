@@ -20,19 +20,16 @@ interface AnvilStepsProps {
 export default function AnvilSteps({ items }: AnvilStepsProps) {
   const { enchantments, edition } = useAnvilContext();
 
-  // const combinations = getAnvilCombinations(items, { enchantments, edition });
-  // console.log("Combinations:", combinations);
-
   const combination = getBestAnvilCombination(items, { enchantments, edition });
   console.log("Best combination:", combination);
 
   return (
     <div className="flex flex-col gap-4">
-      {combination && combination.steps.length > 0 ? (
+      {items.length > 1 && combination && combination.steps.length > 0 ? (
         combination.steps.map((step, index) => (
           <AnvilStep key={index} step={step} stepNumber={index + 1} />
         ))
-      ) : (
+      ) : items.length <= 1 ? (
         <div className="flex flex-col gap-2 text-center">
           <span className="italic text-slate-600">
             The optimal enchantment order for your chosen items will appear
@@ -40,6 +37,12 @@ export default function AnvilSteps({ items }: AnvilStepsProps) {
           </span>
           <span className="text-slate-500">
             Start by picking a few items and give them some enchantments.
+          </span>
+        </div>
+      ) : (
+        <div className="flex flex-col gap-2 text-center">
+          <span className="italic text-red-600">
+            The chosen items and/or enchantments are not compatible.
           </span>
         </div>
       )}
@@ -97,7 +100,7 @@ function AnvilStep({ step, stepNumber }: AnvilStepProps) {
   return (
     <div className="m-auto border p-4 rounded-lg">
       <h3>
-        Step {stepNumber} <i className="text-slate-500">({step.cost} levels)</i>
+        Step {stepNumber} <i className="text-slate-500">({cost} levels)</i>
       </h3>
       <div className="flex gap-3 items-center max-w-5xl">
         <AnvilItem item={targetItem} />

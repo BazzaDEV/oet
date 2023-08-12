@@ -93,7 +93,7 @@ const ItemCard = forwardRef<
     <Card
       {...props}
       ref={ref}
-      className="hover:scale-105 cursor-pointer select-none hover:shadow-md transition-all duration-[2s]"
+      className="cursor-pointer select-none transition-all duration-2000 hover:scale-105 shadow-md"
     >
       <CardHeader>
         <CardTitle className="flex gap-10 justify-between items-center">
