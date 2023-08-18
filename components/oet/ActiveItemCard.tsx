@@ -124,7 +124,7 @@ const ItemCard = forwardRef<
       >
         {item.enchantments.length > 0 ? (
           item.enchantments.map((enchantment) => (
-            <span key={enchantment.name}>
+            <span className="whitespace-nowrap" key={enchantment.name}>
               {enchantment.display_name} {toRoman(enchantment.level)}
             </span>
           ))
