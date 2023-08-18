@@ -1,4 +1,4 @@
-import { flatMap, flow, map, uniq, values } from "lodash/fp";
+import { flatMap, flow, map, uniq, values } from "lodash/fp"
 import {
   ActiveEnchantment,
   ActiveItem,
@@ -7,18 +7,18 @@ import {
   EnchantmentDetails,
   Item,
   MinecraftEdition,
-} from "lib/types";
-import enchantments from "lib/data/enchantments.json";
-import { filter, omit } from "lodash";
+} from "lib/types"
+import enchantments from "lib/data/enchantments.json"
+import { filter, omit } from "lodash"
 
 export function getEnchantments(edition: MinecraftEdition) {
   function applyOverrides(e: EnchantmentData): EnchantmentDetails {
-    if (!e.overrides) return e;
+    if (!e.overrides) return e
 
-    const { java, bedrock } = e.overrides;
-    const overrides = edition === MinecraftEdition.Java ? java : bedrock;
+    const { java, bedrock } = e.overrides
+    const overrides = edition === MinecraftEdition.Java ? java : bedrock
 
-    return { ...omit(e, "overrides"), ...overrides };
+    return { ...omit(e, "overrides"), ...overrides }
   }
 
   function filterByEdition(
@@ -26,12 +26,12 @@ export function getEnchantments(edition: MinecraftEdition) {
   ): EnchantmentDetails[] {
     return filter(enchantments, (e: EnchantmentData) =>
       e.editions.includes(edition)
-    );
+    )
   }
 
   return flow([values, filterByEdition, map(applyOverrides)])(
     enchantments
-  ) as EnchantmentDetails[];
+  ) as EnchantmentDetails[]
 }
 
 export function getMultiplier(
@@ -39,37 +39,37 @@ export function getMultiplier(
   enchantment: Enchantment,
   enchantments: EnchantmentDetails[]
 ) {
-  const enchantmentDetails = getEnchantment(enchantment, enchantments);
+  const enchantmentDetails = getEnchantment(enchantment, enchantments)
 
   return item.name === "book"
     ? // Use book multiplier
       enchantmentDetails.book_multiplier
     : // Use item multiplier
-      enchantmentDetails.item_multiplier;
+      enchantmentDetails.item_multiplier
 }
 
 export function getEnchantment(
   enchantment: Enchantment,
   enchantments: EnchantmentDetails[]
 ) {
-  const result = enchantments.find((e) => e.name === enchantment.name);
+  const result = enchantments.find((e) => e.name === enchantment.name)
 
-  if (!result) throw new Error(`Enchantment ${enchantment} not found`);
-  return result;
+  if (!result) throw new Error(`Enchantment ${enchantment} not found`)
+  return result
 }
 
 export function getPrettyName(
   enchantment: Enchantment,
   enchantments: EnchantmentDetails[]
 ) {
-  return getEnchantment(enchantment, enchantments).display_name;
+  return getEnchantment(enchantment, enchantments).display_name
 }
 
 export function getMaxLevel(
   enchantment: Enchantment,
   enchantments: EnchantmentDetails[]
 ) {
-  return getEnchantment(enchantment, enchantments).max_level;
+  return getEnchantment(enchantment, enchantments).max_level
 }
 
 export function getApplicableEnchantments(
@@ -77,15 +77,15 @@ export function getApplicableEnchantments(
   enchantments: EnchantmentDetails[]
 ) {
   function isApplicableToItem(enchantment: EnchantmentDetails) {
-    return enchantment.applies_to.includes(item.name);
+    return enchantment.applies_to.includes(item.name)
   }
 
-  return filter(enchantments, isApplicableToItem);
+  return filter(enchantments, isApplicableToItem)
 }
 
 export function itemHasEnchant(item: ActiveItem, enchantment: Enchantment) {
-  const result = item.enchantments.find((e) => e.name === enchantment.name);
-  return result !== undefined;
+  const result = item.enchantments.find((e) => e.name === enchantment.name)
+  return result !== undefined
 }
 
 export function getIncompatibleEnchantments(
@@ -93,10 +93,10 @@ export function getIncompatibleEnchantments(
   enchantments: EnchantmentDetails[]
 ) {
   const incompatibleEnchants =
-    getEnchantment(enchantment, enchantments).incompatible_with ?? [];
+    getEnchantment(enchantment, enchantments).incompatible_with ?? []
   return incompatibleEnchants.map((name) => ({
     name,
-  }));
+  }))
 }
 
 export function getAllIncompatibleEnchantments(
@@ -104,10 +104,10 @@ export function getAllIncompatibleEnchantments(
   enchantments: EnchantmentDetails[]
 ) {
   function incompatible(e: Enchantment) {
-    return getIncompatibleEnchantments(e, enchantments);
+    return getIncompatibleEnchantments(e, enchantments)
   }
 
-  return flow([flatMap(incompatible), uniq])(input) as Enchantment[];
+  return flow([flatMap(incompatible), uniq])(input) as Enchantment[]
 }
 
 export function getConflictingEnchantsforItem(
@@ -115,12 +115,12 @@ export function getConflictingEnchantsforItem(
   enchantments: EnchantmentDetails[]
 ) {
   function incompatibleEnchants(e: Enchantment) {
-    return getIncompatibleEnchantments(e, enchantments);
+    return getIncompatibleEnchantments(e, enchantments)
   }
 
   return flow([flatMap(incompatibleEnchants), uniq])(
     item.enchantments
-  ) as Enchantment[];
+  ) as Enchantment[]
 }
 
 export function isEqualOrBetter(
@@ -130,20 +130,20 @@ export function isEqualOrBetter(
   return (
     E1.length >= E2.length &&
     E1.every((e1) => {
-      const matchingEnchant = E2.find((e2) => e2.name === e1.name);
-      return matchingEnchant && e1.level >= matchingEnchant.level;
+      const matchingEnchant = E2.find((e2) => e2.name === e1.name)
+      return matchingEnchant && e1.level >= matchingEnchant.level
     })
-  );
+  )
 }
 
 export function isEqual(E1: ActiveEnchantment[], E2: ActiveEnchantment[]) {
   return (
     E1.length === E2.length &&
     E1.every((e1) => {
-      const matchingEnchant = E2.find((e2) => e2.name === e1.name);
-      return matchingEnchant && e1.level === matchingEnchant.level;
+      const matchingEnchant = E2.find((e2) => e2.name === e1.name)
+      return matchingEnchant && e1.level === matchingEnchant.level
     })
-  );
+  )
 }
 
 export function isApplicableToItem(
@@ -153,5 +153,5 @@ export function isApplicableToItem(
 ) {
   return getEnchantment(enchantment, enchantments).applies_to.includes(
     item.name
-  );
+  )
 }

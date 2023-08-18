@@ -1,29 +1,27 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import AnvilSteps from "./AnvilSteps";
-import ItemPicker from "./ItemPicker";
-import { ActiveItem, Item } from "lib/types";
-import ActiveItemsList from "./ActiveItemsList";
-import { nanoid } from "nanoid";
-import { AnvilContextProvider } from "hooks/useAnvil";
-import { prettyItem } from "lib/utils";
+import { useEffect, useState } from "react"
+import AnvilSteps from "./AnvilSteps"
+import ItemPicker from "./ItemPicker"
+import { ActiveItem, Item } from "lib/types"
+import ActiveItemsList from "./ActiveItemsList"
+import { nanoid } from "nanoid"
+import { AnvilContextProvider } from "hooks/useAnvil"
+import { prettyItem } from "lib/utils"
+import CalculateButton from "components/CalculateButton"
 
 export default function OET() {
-  const [activeItems, setActiveItems] = useState<ActiveItem[]>([]);
-  const [uniqueItem, setUniqueItem] = useState<Item | undefined>(undefined);
+  const [activeItems, setActiveItems] = useState<ActiveItem[]>([])
+  const [uniqueItem, setUniqueItem] = useState<Item | undefined>(undefined)
 
   useEffect(() => {
-    // console.log("Active items:");
-    // activeItems.forEach((i) => console.log(prettyItem(i)));
-    // console.log("\n\n");
-    console.log(activeItems);
-  }, [activeItems]);
+    console.log(activeItems)
+  }, [activeItems])
 
   function handleItemPickerClick(item: Item) {
     if (!uniqueItem && item.name !== "book") {
-      console.log("Setting unique item to", item);
-      setUniqueItem(item);
+      console.log("Setting unique item to", item)
+      setUniqueItem(item)
     }
 
     setActiveItems([
@@ -34,30 +32,30 @@ export default function OET() {
         enchantments: [],
         anvilUses: 0,
       },
-    ]);
+    ])
   }
 
   function updateItem(id: string, updatedItem: Partial<ActiveItem>) {
     setActiveItems(
       activeItems.map((i) => {
         if (i.id !== id) {
-          return i;
+          return i
         }
 
         return {
           ...i,
           ...updatedItem,
-        };
+        }
       })
-    );
+    )
   }
 
   function deleteItem(id: string) {
-    const deletedItem = activeItems.find((i) => i.id === id);
-    setActiveItems(activeItems.filter((i) => i.id !== id));
+    const deletedItem = activeItems.find((i) => i.id === id)
+    setActiveItems(activeItems.filter((i) => i.id !== id))
 
     if (uniqueItem?.name === deletedItem?.name) {
-      setUniqueItem(undefined);
+      setUniqueItem(undefined)
     }
   }
 
@@ -88,9 +86,12 @@ export default function OET() {
           <h2 className="text-center">
             <span className="font-semibold">(3)</span> Combine!
           </h2>
+          <div className="flex justify-center">
+            <CalculateButton />
+          </div>
           <AnvilSteps items={activeItems} />
         </div>
       </div>
     </AnvilContextProvider>
-  );
+  )
 }

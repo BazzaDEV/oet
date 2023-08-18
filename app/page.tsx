@@ -1,9 +1,9 @@
-import OET from "components/oet/OET";
-import { cn } from "lib/utils";
+import OET from "components/oet/OET"
+import { cn } from "lib/utils"
 
 // https://www.andrealves.dev/blog/how-to-make-an-animated-gradient-text-with-tailwindcss/
 const animatedGradientStyles =
-  "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-transparent bg-clip-text bg-300% animate-gradient";
+  "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-transparent bg-clip-text bg-300% animate-gradient"
 
 export default function Home() {
   return (
@@ -13,11 +13,11 @@ export default function Home() {
           Optimal Enchant Tool
         </h1>
         <p className="text-center mx-2 text-slate-500">
-          {`The only tool you'll ever need to combine tools, items, and armor in an
-        anvil.`}
+          The only tool you'll ever need to combine tools, items, and armor in
+          an anvil.
         </p>
       </div>
       <OET />
     </main>
-  );
+  )
 }
