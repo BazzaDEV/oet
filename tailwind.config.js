@@ -22,14 +22,19 @@ module.exports = {
           "50%": { backgroundPosition: "100% 50%" },
           "100%": { backgroundPosition: "0% 50%" },
         },
+        slide: {
+          "0%, 100%": { transform: "translateX(0)" },
+          "50%": { transform: "translateX(6px)" },
+        },
       },
       backgroundSize: {
         "300%": "300%",
       },
       animation: {
         gradient: "animatedgradient 3s ease infinite alternate",
+        slide: "slide 1.5s cubic-bezier(0.950, 0.630, 0.095, 0.590) infinite",
       },
     },
     plugins: [require("tailwindcss-animate")],
   },
-};
+}
