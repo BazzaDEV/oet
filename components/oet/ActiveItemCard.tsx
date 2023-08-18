@@ -1,19 +1,19 @@
-import Image from "next/image";
-import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover";
-import { Label } from "components/ui/label";
-import { Input } from "components/ui/input";
-import { ActiveEnchantment, ActiveItem, Enchantment } from "lib/types";
+import Image from "next/image"
+import { Popover, PopoverContent, PopoverTrigger } from "components/ui/popover"
+import { Label } from "components/ui/label"
+import { Input } from "components/ui/input"
+import { ActiveEnchantment, ActiveItem, Enchantment } from "lib/types"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "components/ui/card";
-import { numberToRomanNumeral as toRoman } from "romanumber";
-import { ChangeEvent, HTMLAttributes, forwardRef, useState } from "react";
-import { Button } from "components/ui/button";
-import { AlertTriangle, Trash2 } from "lucide-react";
+} from "components/ui/card"
+import { numberToRomanNumeral as toRoman } from "romanumber"
+import { ChangeEvent, HTMLAttributes, forwardRef, useState } from "react"
+import { Button } from "components/ui/button"
+import { AlertTriangle, Trash2 } from "lucide-react"
 import {
   Select,
   SelectContent,
@@ -21,19 +21,19 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "components/ui/select";
+} from "components/ui/select"
 import {
   getApplicableEnchantments,
   getConflictingEnchantsforItem,
   itemHasEnchant,
-} from "lib/enchantments";
-import { useAnvilContext } from "hooks/useAnvil";
-import { getIcon, getItemName } from "lib/items";
+} from "lib/enchantments"
+import { useAnvilContext } from "hooks/useAnvil"
+import { getIcon, getItemName } from "lib/items"
 
 interface EnchantmentInputProps {
-  enchantment: ActiveEnchantment;
-  updateEnchantment: (enchantment: Enchantment, level: number) => void;
-  deleteEnchantment: (enchantment: Enchantment) => void;
+  enchantment: ActiveEnchantment
+  updateEnchantment: (enchantment: Enchantment, level: number) => void
+  deleteEnchantment: (enchantment: Enchantment) => void
 }
 
 function EnchantmentInput({
@@ -41,14 +41,14 @@ function EnchantmentInput({
   updateEnchantment,
   deleteEnchantment,
 }: EnchantmentInputProps) {
-  const [level, setLevel] = useState<number>(1);
-  const { display_name, max_level } = enchantment;
+  const [level, setLevel] = useState<number>(1)
+  const { display_name, max_level } = enchantment
 
   function handleChange(value: string) {
-    const newLevel = Number(value);
+    const newLevel = Number(value)
     if (newLevel > 0 && newLevel <= max_level) {
-      updateEnchantment(enchantment, newLevel);
-      setLevel(newLevel);
+      updateEnchantment(enchantment, newLevel)
+      setLevel(newLevel)
     }
   }
 
@@ -77,12 +77,12 @@ function EnchantmentInput({
         </Button>
       </div>
     </>
-  );
+  )
 }
 
 interface ItemCardProps {
-  item: ActiveItem;
-  deleteItem: (id: string) => void;
+  item: ActiveItem
+  deleteItem: (id: string) => void
 }
 
 const ItemCard = forwardRef<
@@ -133,15 +133,15 @@ const ItemCard = forwardRef<
         )}
       </CardContent>
     </Card>
-  );
-});
+  )
+})
 
-ItemCard.displayName = "ItemCard";
+ItemCard.displayName = "ItemCard"
 
 interface ActiveItemCardProps {
-  item: ActiveItem;
-  updateItem: (id: string, updatedItem: Partial<ActiveItem>) => void;
-  deleteItem: (id: string) => void;
+  item: ActiveItem
+  updateItem: (id: string, updatedItem: Partial<ActiveItem>) => void
+  deleteItem: (id: string) => void
 }
 
 export default function ActiveItemCard({
@@ -149,22 +149,22 @@ export default function ActiveItemCard({
   updateItem,
   deleteItem,
 }: ActiveItemCardProps) {
-  const [selector, setSelector] = useState<string | undefined>(undefined);
-  const { enchantments } = useAnvilContext();
+  const [selector, setSelector] = useState<string | undefined>(undefined)
+  const { enchantments } = useAnvilContext()
 
   function updateEnchantment(enchantment: Enchantment, level: number) {
     updateItem(item.id, {
       enchantments: [
         ...item.enchantments.map((e) => {
-          if (e.name !== enchantment.name) return e;
+          if (e.name !== enchantment.name) return e
 
           return {
             ...e,
             level,
-          };
+          }
         }),
       ],
-    });
+    })
   }
 
   function deleteEnchantment(enchantment: Enchantment) {
@@ -172,21 +172,21 @@ export default function ActiveItemCard({
       enchantments: [
         ...item.enchantments.filter((e) => e.name !== enchantment.name),
       ],
-    });
+    })
   }
 
   function handlePenaltyChange(e: ChangeEvent<HTMLInputElement>) {
-    const value = e.target.valueAsNumber;
-    const anvilUses = isNaN(value) ? 0 : value;
-    updateItem(item.id, { anvilUses });
+    const value = e.target.valueAsNumber
+    const anvilUses = isNaN(value) ? 0 : value
+    updateItem(item.id, { anvilUses })
   }
 
   function handleEnchantmentSelectorChange(value: string) {
-    setSelector("");
+    setSelector("")
 
-    const enchantment = enchantments.find((e) => e.name === value);
+    const enchantment = enchantments.find((e) => e.name === value)
 
-    if (!enchantment) return;
+    if (!enchantment) return
 
     updateItem(item.id, {
       enchantments: [
@@ -196,13 +196,13 @@ export default function ActiveItemCard({
           level: 1,
         },
       ],
-    });
+    })
   }
 
   const conflictingEnchants = getConflictingEnchantsforItem(
     item,
     enchantments
-  ).map((e) => e.name);
+  ).map((e) => e.name)
 
   return (
     <Popover>
@@ -271,5 +271,5 @@ export default function ActiveItemCard({
         </div>
       </PopoverContent>
     </Popover>
-  );
+  )
 }

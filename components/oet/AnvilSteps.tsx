@@ -1,27 +1,27 @@
-import { useAnvilContext } from "hooks/useAnvil";
-import { getAnvilCombinations, getBestAnvilCombination } from "lib/calc";
-import { getIcon, getItemName } from "lib/items";
-import { ActiveItem, AnvilStep } from "lib/types";
-import { cn, prettyEnchant } from "lib/utils";
-import Image from "next/image";
+import { useAnvilContext } from "hooks/useAnvil"
+import { getAnvilCombinations, getBestAnvilCombination } from "lib/calc"
+import { getIcon, getItemName } from "lib/items"
+import { ActiveItem, AnvilStep } from "lib/types"
+import { cn, prettyEnchant } from "lib/utils"
+import Image from "next/image"
 import {
   Card,
   CardContent,
   CardDescription,
   CardHeader,
   CardTitle,
-} from "components/ui/card";
-import { ArrowRight, Plus } from "lucide-react";
+} from "components/ui/card"
+import { ArrowRight, Plus } from "lucide-react"
 
 interface AnvilStepsProps {
-  items: ActiveItem[];
+  items: ActiveItem[]
 }
 
 export default function AnvilSteps({ items }: AnvilStepsProps) {
-  const { enchantments, edition } = useAnvilContext();
+  const { enchantments, edition } = useAnvilContext()
 
-  const combination = getBestAnvilCombination(items, { enchantments, edition });
-  console.log("Best combination:", combination);
+  const combination = getBestAnvilCombination(items, { enchantments, edition })
+  console.log("Best combination:", combination)
 
   return (
     <div className="flex flex-col gap-4">
@@ -47,11 +47,11 @@ export default function AnvilSteps({ items }: AnvilStepsProps) {
         </div>
       )}
     </div>
-  );
+  )
 }
 
 interface AnvilItemProps {
-  item: ActiveItem;
+  item: ActiveItem
 }
 
 function AnvilItem({ item }: AnvilItemProps) {
@@ -87,16 +87,16 @@ function AnvilItem({ item }: AnvilItemProps) {
         )}
       </CardContent>
     </Card>
-  );
+  )
 }
 
 interface AnvilStepProps {
-  step: AnvilStep;
-  stepNumber: number;
+  step: AnvilStep
+  stepNumber: number
 }
 
 function AnvilStep({ step, stepNumber }: AnvilStepProps) {
-  const { targetItem, sacrificeItem, resultingItem, cost } = step;
+  const { targetItem, sacrificeItem, resultingItem, cost } = step
   return (
     <div className="m-auto border p-4 rounded-lg">
       <h3>
@@ -114,5 +114,5 @@ function AnvilStep({ step, stepNumber }: AnvilStepProps) {
         <AnvilItem item={resultingItem} />
       </div>
     </div>
-  );
+  )
 }
