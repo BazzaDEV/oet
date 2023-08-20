@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "jest --watch"
   },
   "dependencies": {
     "@radix-ui/react-label": "^2.0.2",
@@ -35,7 +36,11 @@
     "typescript": "5.1.6"
   },
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.0.1",
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.5.3",
     "@types/lodash": "^4.14.197",
+    "jest-environment-jsdom": "^29.6.2",
     "tailwindcss-animate": "^1.0.6"
   }
 }
