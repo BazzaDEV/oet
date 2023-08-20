@@ -3,6 +3,7 @@ import "./globals.css"
 import type { Metadata } from "next"
 
 import localFont from "next/font/local"
+import { Toaster } from "@/components/ui/toaster"
 
 const faithful = localFont({
   src: [
@@ -55,7 +56,10 @@ export default function RootLayout({
       lang="en"
       className={cn(faithful.className, "flex flex-col p-4 max-w-5xl m-auto")}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <Toaster />
+      </body>
     </html>
   )
 }
