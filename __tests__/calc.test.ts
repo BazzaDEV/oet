@@ -1,6 +1,6 @@
-import { anvil, combineEnchantments } from "lib/calc";
-import { getEnchantments } from "lib/enchantments";
-import { MinecraftEdition } from "lib/types";
+import { anvil } from "@/lib/calc"
+import { getEnchantments } from "@/lib/enchantments"
+import { MinecraftEdition } from "@/lib/types"
 
 const targetItem = {
   id: "Gbd0mDTV7bvqJ2WkmJylu",
@@ -31,7 +31,7 @@ const targetItem = {
     },
   ],
   anvilUses: 1,
-};
+}
 
 const sacrificeItem = {
   id: "-nyxUFNAwLMENtRRPTy2K",
@@ -50,18 +50,18 @@ const sacrificeItem = {
     },
   ],
   anvilUses: 0,
-};
+}
 
-const enchantments = getEnchantments(MinecraftEdition.Java);
+const enchantments = getEnchantments(MinecraftEdition.Java)
 
 describe("Test combine enchantments", () => {
   it("test", () => {
     const { resultingItem, cost } = anvil(targetItem, sacrificeItem, {
       enchantments,
       edition: MinecraftEdition.Java,
-    });
+    })
 
-    expect(resultingItem.anvilUses).toBe(2);
+    expect(resultingItem.anvilUses).toBe(2)
 
     expect(resultingItem.enchantments).toStrictEqual([
       {
@@ -87,8 +87,8 @@ describe("Test combine enchantments", () => {
         applies_to: ["book", "pickaxe", "shovel", "axe", "hoe"],
         level: 1,
       },
-    ]);
+    ])
 
-    expect(cost).toBe(6);
-  });
-});
+    expect(cost).toBe(6)
+  })
+})
