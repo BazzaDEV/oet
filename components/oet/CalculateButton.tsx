@@ -1,9 +1,14 @@
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 
-export default function CalculateButton() {
+interface Props {
+  onClick?: () => void
+}
+
+export default function CalculateButton({ onClick }: Props) {
   return (
     <Button
+      onClick={onClick}
       size="lg"
       className={cn(
         "w-[230px] rounded-3xl py-8 shadow-xl",
