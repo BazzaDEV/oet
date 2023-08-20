@@ -53,7 +53,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${faithful.className} flex flex-col p-4 max-w-5xl m-auto bg-`}
+      className={`${faithful.className} flex flex-col p-4 max-w-5xl m-auto`}
     >
       <body>
         {children}

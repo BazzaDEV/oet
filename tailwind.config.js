@@ -17,6 +17,14 @@ module.exports = {
     },
     extend: {
       keyframes: {
+        "accordion-down": {
+          from: { height: 0 },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: 0 },
+        },
         animatedgradient: {
           "0%": { backgroundPosition: "0% 50%" },
           "50%": { backgroundPosition: "100% 50%" },
@@ -31,6 +39,8 @@ module.exports = {
         "300%": "300%",
       },
       animation: {
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
         gradient: "animatedgradient 3s ease infinite alternate",
         slide: "slide 1.5s cubic-bezier(0.950, 0.630, 0.095, 0.590) infinite",
       },
