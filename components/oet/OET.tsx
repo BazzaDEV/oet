@@ -1,29 +1,21 @@
-"use client";
+"use client"
 
-import { useEffect, useState } from "react";
-import AnvilSteps from "./AnvilSteps";
-import ItemPicker from "./ItemPicker";
-import { ActiveItem, Item } from "lib/types";
-import ActiveItemsList from "./ActiveItemsList";
-import { nanoid } from "nanoid";
-import { AnvilContextProvider } from "hooks/useAnvil";
-import { prettyItem } from "lib/utils";
+import { useState } from "react"
+import AnvilSteps from "./AnvilSteps"
+import ItemPicker from "./ItemPicker"
+import { ActiveItem, Item } from "@/lib/types"
+import ActiveItemsList from "./ActiveItemsList"
+import { nanoid } from "nanoid"
+import { AnvilContextProvider } from "@/hooks/useAnvil"
 
 export default function OET() {
-  const [activeItems, setActiveItems] = useState<ActiveItem[]>([]);
-  const [uniqueItem, setUniqueItem] = useState<Item | undefined>(undefined);
-
-  useEffect(() => {
-    // console.log("Active items:");
-    // activeItems.forEach((i) => console.log(prettyItem(i)));
-    // console.log("\n\n");
-    console.log(activeItems);
-  }, [activeItems]);
+  const [activeItems, setActiveItems] = useState<ActiveItem[]>([])
+  const [uniqueItem, setUniqueItem] = useState<Item | undefined>(undefined)
 
   function handleItemPickerClick(item: Item) {
     if (!uniqueItem && item.name !== "book") {
-      console.log("Setting unique item to", item);
-      setUniqueItem(item);
+      console.log("Setting unique item to", item)
+      setUniqueItem(item)
     }
 
     setActiveItems([
@@ -34,30 +26,30 @@ export default function OET() {
         enchantments: [],
         anvilUses: 0,
       },
-    ]);
+    ])
   }
 
   function updateItem(id: string, updatedItem: Partial<ActiveItem>) {
     setActiveItems(
       activeItems.map((i) => {
         if (i.id !== id) {
-          return i;
+          return i
         }
 
         return {
           ...i,
           ...updatedItem,
-        };
+        }
       })
-    );
+    )
   }
 
   function deleteItem(id: string) {
-    const deletedItem = activeItems.find((i) => i.id === id);
-    setActiveItems(activeItems.filter((i) => i.id !== id));
+    const deletedItem = activeItems.find((i) => i.id === id)
+    setActiveItems(activeItems.filter((i) => i.id !== id))
 
     if (uniqueItem?.name === deletedItem?.name) {
-      setUniqueItem(undefined);
+      setUniqueItem(undefined)
     }
   }
 
@@ -69,7 +61,6 @@ export default function OET() {
             <span className="font-semibold">(1)</span> Choose Items
           </h2>
           <ItemPicker
-            // items={activeItems}
             uniqueItem={uniqueItem}
             onItemClick={handleItemPickerClick}
           />
@@ -92,5 +83,5 @@ export default function OET() {
         </div>
       </div>
     </AnvilContextProvider>
-  );
+  )
 }

@@ -1,7 +1,7 @@
-import { ActiveItem } from "lib/types";
-import ActiveItemCard from "./ActiveItemCard";
-import { Alert, AlertDescription, AlertTitle } from "components/ui/alert";
-import { AlertCircle, Megaphone, Terminal } from "lucide-react";
+import { ActiveItem } from "@/lib/types"
+import ActiveItemCard from "./ActiveItemCard"
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert"
+import { AlertCircle } from "lucide-react"
 
 export function AlertPanel() {
   return (
@@ -15,13 +15,13 @@ export function AlertPanel() {
         optimal enchantment order.
       </AlertDescription>
     </Alert>
-  );
+  )
 }
 
 interface ActiveItemsListProps {
-  items: ActiveItem[];
-  updateItem: (id: string, updatedItem: Partial<ActiveItem>) => void;
-  deleteItem: (id: string) => void;
+  items: ActiveItem[]
+  updateItem: (id: string, updatedItem: Partial<ActiveItem>) => void
+  deleteItem: (id: string) => void
 }
 
 export default function ActiveItemsList({
@@ -30,7 +30,7 @@ export default function ActiveItemsList({
   deleteItem,
 }: ActiveItemsListProps) {
   function hasEmptyBooks() {
-    return items.some((i) => i.name === "book" && i.enchantments.length === 0);
+    return items.some((i) => i.name === "book" && i.enchantments.length === 0)
   }
   return (
     <>
@@ -58,5 +58,5 @@ export default function ActiveItemsList({
         )}
       </div>
     </>
-  );
+  )
 }

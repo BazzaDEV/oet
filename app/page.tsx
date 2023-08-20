@@ -1,15 +1,16 @@
-import OET from "components/oet/OET";
-import { cn } from "lib/utils";
-
-// https://www.andrealves.dev/blog/how-to-make-an-animated-gradient-text-with-tailwindcss/
-const animatedGradientStyles =
-  "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-transparent bg-clip-text bg-300% animate-gradient";
+import OET from "@/components/oet/OET"
+import { cn } from "@/lib/utils"
 
 export default function Home() {
   return (
     <main className="flex flex-col">
       <div className="mb-10">
-        <h1 className={cn("text-center m-10", animatedGradientStyles)}>
+        <h1
+          className={cn(
+            "text-center m-10",
+            "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-transparent bg-clip-text bg-300% animate-gradient"
+          )}
+        >
           Optimal Enchant Tool
         </h1>
         <p className="text-center mx-2 text-slate-500">
@@ -19,5 +20,5 @@ export default function Home() {
       </div>
       <OET />
     </main>
-  );
+  )
 }
