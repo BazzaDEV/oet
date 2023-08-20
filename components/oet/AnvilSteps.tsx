@@ -45,7 +45,7 @@ function AnvilItem({ item }: AnvilItemProps) {
           />
           <span className="text-lg sm:text-xl">{getItemName(item)}</span>
         </CardTitle>
-        <CardDescription className="text-center">
+        <CardDescription className="text-center whitespace-nowrap">
           Anvil Uses: {item.anvilUses}
         </CardDescription>
       </CardHeader>
@@ -55,7 +55,7 @@ function AnvilItem({ item }: AnvilItemProps) {
       >
         {item.enchantments.length > 0 ? (
           item.enchantments.map((e) => (
-            <span className="text-center" key={e.name}>
+            <span className="text-center whitespace-nowrap" key={e.name}>
               {prettyEnchant(e)}
             </span>
           ))
