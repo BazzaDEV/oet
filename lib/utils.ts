@@ -1,8 +1,8 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
-import { ActiveEnchantment, ActiveItem } from "./types"
+import { ActiveEnchantment, ActiveItem } from "@/lib/types"
 import { cloneDeep, concat, slice } from "lodash"
-import { getItemName } from "./items"
+import { getItemName } from "@/lib/items"
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
