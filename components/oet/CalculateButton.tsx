@@ -3,11 +3,13 @@ import { cn } from "@/lib/utils"
 
 interface Props {
   onClick?: () => void
+  disabled?: boolean
 }
 
-export default function CalculateButton({ onClick }: Props) {
+export default function CalculateButton({ onClick, disabled = false }: Props) {
   return (
     <Button
+      disabled={disabled}
       onClick={onClick}
       size="lg"
       className={cn(

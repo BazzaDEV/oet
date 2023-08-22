@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import AnvilSteps from "./AnvilSteps"
 import ItemPicker from "./ItemPicker"
 import { ActiveItem, AnvilCombination, Item } from "@/lib/types"
@@ -17,6 +17,10 @@ export default function OET() {
   const [uniqueItem, setUniqueItem] = useState<Item | undefined>(undefined)
   const [loading, setLoading] = useState<boolean>(false)
   const [result, setResult] = useState<AnvilCombination | undefined>(undefined)
+
+  useEffect(() => {
+    setResult(undefined)
+  }, [activeItems])
 
   function handleItemPickerClick(item: Item) {
     if (!uniqueItem && item.name !== "book") {
@@ -95,9 +99,19 @@ export default function OET() {
         />
       </div>
       <div className="flex flex-col gap-5 items-center">
-        <CalculateButton onClick={handleCalculateClick} />
-        <AnvilSteps combination={result} />
+        <CalculateButton
+          onClick={handleCalculateClick}
+          disabled={
+            loading ||
+            !activeItems ||
+            activeItems.length < 2 ||
+            activeItems.some(
+              (i) => i.name === "book" && i.enchantments.length === 0
+            )
+          }
+        />
       </div>
+      <AnvilSteps combination={result} />
     </div>
   )
 }
