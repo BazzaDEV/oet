@@ -6,7 +6,7 @@ import ItemPicker from "./ItemPicker"
 import { ActiveItem, AnvilCombination, Item } from "@/lib/types"
 import ActiveItemsList from "./ActiveItemsList"
 import { nanoid } from "nanoid"
-import { AnvilContextProvider, useAnvilContext } from "@/hooks/useAnvil"
+import { useAnvilContext } from "@/hooks/useAnvil"
 import CalculateButton from "./CalculateButton"
 import { getBestAnvilCombination } from "@/lib/calc"
 
