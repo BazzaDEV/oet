@@ -111,7 +111,14 @@ export default function OET() {
           }
         />
       </div>
-      <AnvilSteps combination={result} />
+      {result && (
+        <div className="flex flex-col gap-5 items-center">
+          <h2 className="text-2xl sm:text-3xl text-center">
+            <span className="font-semibold">(3)</span> Combine
+          </h2>
+          <AnvilSteps combination={result} />
+        </div>
+      )}
     </div>
   )
 }
