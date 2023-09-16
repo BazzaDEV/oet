@@ -1,16 +1,26 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import AnvilSteps from "./AnvilSteps"
 import ItemPicker from "./ItemPicker"
-import { ActiveItem, Item } from "@/lib/types"
+import { ActiveItem, AnvilCombination, Item } from "@/lib/types"
 import ActiveItemsList from "./ActiveItemsList"
 import { nanoid } from "nanoid"
-import { AnvilContextProvider } from "@/hooks/useAnvil"
+import { useAnvilContext } from "@/hooks/useAnvil"
+import CalculateButton from "./CalculateButton"
+import { getBestAnvilCombination } from "@/lib/calc"
 
 export default function OET() {
+  const { enchantments, edition } = useAnvilContext()
+
   const [activeItems, setActiveItems] = useState<ActiveItem[]>([])
   const [uniqueItem, setUniqueItem] = useState<Item | undefined>(undefined)
+  const [loading, setLoading] = useState<boolean>(false)
+  const [result, setResult] = useState<AnvilCombination | undefined>(undefined)
+
+  useEffect(() => {
+    setResult(undefined)
+  }, [activeItems])
 
   function handleItemPickerClick(item: Item) {
     if (!uniqueItem && item.name !== "book") {
@@ -53,35 +63,62 @@ export default function OET() {
     }
   }
 
+  function handleCalculateClick() {
+    setLoading(true)
+
+    // Do calculation
+    const bestCombination = getBestAnvilCombination(activeItems, {
+      enchantments,
+      edition,
+    })
+
+    setResult(bestCombination ?? undefined)
+
+    setLoading(false)
+  }
+
   return (
-    <AnvilContextProvider>
-      <div className="flex flex-col gap-10">
-        <div className="flex flex-col gap-5">
-          <h2 className="text-center">
-            <span className="font-semibold">(1)</span> Choose Items
-          </h2>
-          <ItemPicker
-            uniqueItem={uniqueItem}
-            onItemClick={handleItemPickerClick}
-          />
-        </div>
-        <div className="flex flex-col gap-5">
-          <h2 className="text-center">
-            <span className="font-semibold">(2)</span> Add Enchantments
-          </h2>
-          <ActiveItemsList
-            items={activeItems}
-            updateItem={updateItem}
-            deleteItem={deleteItem}
-          />
-        </div>
-        <div className="flex flex-col gap-5">
-          <h2 className="text-center">
-            <span className="font-semibold">(3)</span> Combine!
-          </h2>
-          <AnvilSteps items={activeItems} />
-        </div>
+    <div className="flex flex-col gap-10">
+      <div className="flex flex-col gap-5">
+        <h2 className="text-2xl sm:text-3xl text-center">
+          <span className="font-semibold">(1)</span> Choose Items
+        </h2>
+        <ItemPicker
+          uniqueItem={uniqueItem}
+          onItemClick={handleItemPickerClick}
+        />
       </div>
-    </AnvilContextProvider>
+      <div className="flex flex-col gap-5">
+        <h2 className="text-2xl sm:text-3xl text-center">
+          <span className="font-semibold">(2)</span> Add Enchantments
+        </h2>
+        <ActiveItemsList
+          items={activeItems}
+          updateItem={updateItem}
+          deleteItem={deleteItem}
+        />
+      </div>
+      <div className="flex flex-col gap-5 items-center">
+        <CalculateButton
+          onClick={handleCalculateClick}
+          disabled={
+            loading ||
+            !activeItems ||
+            activeItems.length < 2 ||
+            activeItems.some(
+              (i) => i.name === "book" && i.enchantments.length === 0
+            )
+          }
+        />
+      </div>
+      {result && (
+        <div className="flex flex-col gap-5 items-center">
+          <h2 className="text-2xl sm:text-3xl text-center">
+            <span className="font-semibold">(3)</span> Combine
+          </h2>
+          <AnvilSteps combination={result} />
+        </div>
+      )}
+    </div>
   )
 }

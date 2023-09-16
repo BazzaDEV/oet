@@ -109,7 +109,7 @@ const ItemCard = forwardRef<
               width={40}
               height={40}
             />
-            <h4>{getItemName(item)}</h4>
+            <h4 className="text-lg sm:text-xl">{getItemName(item)}</h4>
           </div>
           <Button
             variant="outline"

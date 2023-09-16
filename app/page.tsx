@@ -1,4 +1,7 @@
+"use client"
+
 import OET from "@/components/oet/OET"
+import { AnvilContextProvider } from "@/hooks/useAnvil"
 import { cn } from "@/lib/utils"
 
 export default function Home() {
@@ -7,6 +10,7 @@ export default function Home() {
       <div className="mb-10">
         <h1
           className={cn(
+            "tracking-tighter text-4xl sm:text-5xl",
             "text-center m-10",
             "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 text-transparent bg-clip-text bg-300% animate-gradient"
           )}
@@ -18,7 +22,9 @@ export default function Home() {
         anvil.`}
         </p>
       </div>
-      <OET />
+      <AnvilContextProvider>
+        <OET />
+      </AnvilContextProvider>
     </main>
   )
 }
