@@ -16,6 +16,7 @@ export default function CalculateButton({ onClick, disabled = false }: Props) {
         "w-[230px] rounded-3xl py-8 shadow-xl",
         "flex items-center justify-between",
         "text-2xl",
+        "hover:scale-105 transition-transform ease-in-out",
         "bg-gradient-to-r from-indigo-600 via-purple-600 to-pink-600 bg-300% animate-gradient"
       )}
     >
